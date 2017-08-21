@@ -224,6 +224,10 @@ def update_header(arr_imgs,obj1,filter_i):
                         hdulist[i].header.set('EXPTIME',EXPTIME)
             #If there was only one header write that header's data to new
             #version of fits image
+            os.chdir('../../interim')
+            if not os.path.exists(obj1):
+                os.makedirs(obj1)
+                os.chdir(obj1)
             if len(hdulist) == 1:
                 fits.writeto(img+'_test_'+filter_i+'_.fits',data,hdulist[0].header,output_verify='ignore')
             #Else write the 'SCI' header's data to new version of fits image
@@ -234,13 +238,11 @@ def update_header(arr_imgs,obj1,filter_i):
         #and write it to a text file along with the object name and the 
         #filter name
         except IOError as e:
-            os.chdir('../../interim')
             with open('Error_swarpfil.txt','a') as newfile:              
                 newfile.write('Object {0} and image {1} raises {2} error'.format\
                 (obj1,img,e))
                 newfile.write('\n')
                 newfile.close()
-            os.chdir('../raw/'+obj1)
     #For this object and filter combination grab all the new versions made
     arr = glob('*test_'+filter_i+'_.fits')
     if len(arr) >= 1: #avoid empty cases where files have been removed earlier

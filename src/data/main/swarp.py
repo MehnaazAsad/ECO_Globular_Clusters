@@ -79,8 +79,8 @@ for index,key in enumerate(ECO_keys):
     #eliminated in preliminary exptime and >2filter checks so for those pairs
     #the files won't exist. They are ignored which is why percent_blank doesn't
     #print anything to the terminal.
-    else:
-        filename = imgs[0]+'_test_'+filter_i+'.fits'
-        if os.path.exists(filename): #avoid empty cases where files don't exist 
-            single_img = fits.open(filename)
-            foo.percent_blank(single_img,obj,filter_i)           
+#    else:
+#        filename = imgs[0]+'_test_'+filter_i+'.fits'
+#        if os.path.exists(filename): #avoid empty cases where files don't exist 
+#            single_img = fits.open(filename)
+#            foo.percent_blank(single_img,obj,filter_i)           
