@@ -244,7 +244,9 @@ def update_header(arr_imgs,obj1,filter_i):
         #and write it to a text file along with the object name and the 
         #filter name
         except IOError as e:
-            os.chdir('../')
+            dir_path = os.getcwd()
+            if os.path.basename(dir_path) == 'data':
+                os.chdir('interim')
             with open('Error_swarpfil.txt','a') as newfile:              
                 newfile.write('Object {0} and image {1} raises {2} error'.format\
                 (obj1,img,e))
