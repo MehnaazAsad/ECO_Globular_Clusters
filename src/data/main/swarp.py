@@ -42,7 +42,7 @@ for index,key in enumerate(ECO_keys):
     #After the first time all that has to be done is to move out of the  
     #interim ECO object dir and into the raw ECO object dir
     elif os.path.basename(dir_path) != obj:
-        os.chdir('../../raw/'+obj)
+        os.chdir('../raw/'+obj)
     #Using the ECOID,filter key to acess the values in the new_filename column
     #i.e. get a list of the images associated with this key pair
     imgs = ECO_dict.get_group(key)['new_filename'].values

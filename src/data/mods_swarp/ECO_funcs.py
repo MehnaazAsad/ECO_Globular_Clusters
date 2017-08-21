@@ -276,6 +276,7 @@ def update_header(arr_imgs,obj1,filter_i):
         #If text file exists return the name
         return filter_i+'_img_list_testfil.txt'
     #If text file doesn't exist return this string
+    os.chdir('../../raw/'+obj1)
     return 'error'
 
 def percent_blank(coadd,obj,filter_i):
