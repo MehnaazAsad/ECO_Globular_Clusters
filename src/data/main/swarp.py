@@ -52,8 +52,8 @@ for index,key in enumerate(ECO_keys):
     img_list_txt = foo.update_header(imgs,obj,filter_i)
 
     #to check for case where all images were in Except clause of update_header
-    #and only run swarp if there are at least 2 images (NEED TO CHANGE)
-    if len(imgs) >= 2 and img_list_txt != 'error': 
+    #and run swarp even for single images
+    if len(imgs) >= 1 and img_list_txt != 'error': 
         ra = np.unique(ECOcat.RA.loc[ECOcat.ECOID==obj])[0]
         dec = np.unique(ECOcat.DEC.loc[ECOcat.ECOID==obj])[0]
         
