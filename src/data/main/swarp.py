@@ -37,12 +37,13 @@ for index,key in enumerate(ECO_keys):
     dir_path = os.getcwd()
     #Since this file is in src/ and we need to access the images we have to 
     #move to the data/raw folder the first time this code runs
-    print(os.getcwd())
+    
     if os.path.basename(dir_path) == 'main':
         os.chdir('../../../data/raw/'+obj)
     #After the first time all that has to be done is to move out of the  
     #interim ECO object dir and into the raw ECO object dir   
     elif os.path.basename(dir_path) != obj:
+        print(os.getcwd())
         os.chdir('../raw/'+obj)
     #Using the ECOID,filter key to acess the values in the new_filename column
     #i.e. get a list of the images associated with this key pair
