@@ -253,11 +253,7 @@ def update_header(arr_imgs,obj1,filter_i):
                 (obj1,img,e))
                 newfile.write('\n')
                 newfile.close()
-            if not os.path.exists(obj1):
-                os.makedirs(obj1)
-                os.chdir(obj1)
-            else:
-                os.chdir(obj1)
+            os.chdir(obj1)
     #For this object and filter combination grab all the new versions made
     arr = glob('*test_'+filter_i+'_.fits')
     if len(arr) >= 1: #avoid empty cases where files have been removed earlier
