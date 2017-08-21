@@ -241,13 +241,13 @@ def update_header(arr_imgs,obj1,filter_i):
             os.chdir('..')
             dir_path = os.getcwd()
             if os.path.basename(dir_path) == 'raw':
-                os.chdir('../../data/interim')
+                os.chdir('../interim')
             with open('Error_swarpfil.txt','a') as newfile:              
                 newfile.write('Object {0} and image {1} raises {2} error'.format\
                 (obj1,img,e))
                 newfile.write('\n')
                 newfile.close()
-            os.chdir('../data/raw/'+obj1)
+            os.chdir('../raw/'+obj1)
     #For this object and filter combination grab all the new versions made
     arr = glob('*test_'+filter_i+'_.fits')
     print(os.getcwd())
