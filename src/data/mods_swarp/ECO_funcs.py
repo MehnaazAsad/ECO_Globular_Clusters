@@ -185,12 +185,6 @@ def update_header(arr_imgs,obj1,filter_i):
     Raises:
         IOError: if 'empty or corrupt FITS file' or 'file does not exist'
     """
-    os.chdir('../../interim/')
-    if not os.path.exists(obj1):
-        os.makedirs(obj1)
-        os.chdir(obj1)
-    else:
-        os.chdir(obj1)
     for img in arr_imgs:
         warnings.simplefilter('ignore', category=AstropyUserWarning)
         try:
@@ -231,14 +225,15 @@ def update_header(arr_imgs,obj1,filter_i):
             #If there was only one header write that header's data to new
             #version of fits image
             
-#            #Make new versions in interim/obj1 folder
-#            if not os.path.exists(obj1):
-#                os.makedirs(obj1)
-#                os.chdir(obj1)
-#            #The second time around, for the same object but a different filter
-#            #this folder already exists so just enter it
-#            else:
-#                os.chdir(obj1)
+            #Make new versions in interim/obj1 folder
+            os.chdir('../../interim/')
+            if not os.path.exists(obj1):
+                os.makedirs(obj1)
+                os.chdir(obj1)
+            #The second time around, for the same object but a different filter
+            #this folder already exists 
+            else:
+                os.chdir(obj1)
             if len(hdulist) == 1:
                 fits.writeto(img+'_test_'+filter_i+'_.fits',data,hdulist[0].header,output_verify='ignore')
             #Else write the 'SCI' header's data to new version of fits image
@@ -249,10 +244,7 @@ def update_header(arr_imgs,obj1,filter_i):
         #and write it to a text file along with the object name and the 
         #filter name
         except IOError as e:
-            os.chdir('..')
-#            dir_path = os.getcwd()
-#            if os.path.basename(dir_path) == 'data':
-#                os.chdir('interim')
+            os.chdir('../')
             with open('Error_swarpfil.txt','a') as newfile:              
                 newfile.write('Object {0} and image {1} raises {2} error'.format\
                 (obj1,img,e))
@@ -276,7 +268,6 @@ def update_header(arr_imgs,obj1,filter_i):
         #If text file exists return the name
         return filter_i+'_img_list_testfil.txt'
     #If text file doesn't exist return this string
-    os.chdir('../../raw/'+obj1)
     return 'error'
 
 def percent_blank(coadd,obj,filter_i):
