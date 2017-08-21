@@ -226,7 +226,7 @@ def update_header(arr_imgs,obj1,filter_i):
             #version of fits image
             
             #Make new versions in interim/obj1 folder
-            os.chdir('../../interim')
+            os.chdir('../../interim/')
             if not os.path.exists(obj1):
                 os.makedirs(obj1)
                 os.chdir(obj1)
@@ -240,7 +240,7 @@ def update_header(arr_imgs,obj1,filter_i):
         #and write it to a text file along with the object name and the 
         #filter name
         except IOError as e:
-            os.chdir('..')
+            os.chdir('../')
             with open('Error_swarpfil.txt','a') as newfile:              
                 newfile.write('Object {0} and image {1} raises {2} error'.format\
                 (obj1,img,e))
