@@ -54,6 +54,7 @@ for index,key in enumerate(ECO_keys):
 
     #To check for case where all images were in Except clause of update_header
     #and run swarp even for single images
+    print(len(imgs))
     if len(imgs) >= 1 and img_list_txt != 'error': 
         ra = np.unique(ECOcat.RA.loc[ECOcat.ECOID==obj])[0]
         dec = np.unique(ECOcat.DEC.loc[ECOcat.ECOID==obj])[0]
