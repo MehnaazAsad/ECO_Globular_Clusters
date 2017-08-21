@@ -250,7 +250,7 @@ def update_header(arr_imgs,obj1,filter_i):
             os.chdir('../raw/'+obj1)
     #For this object and filter combination grab all the new versions made
     arr = glob('*test_'+filter_i+'_.fits')
-    print(os.getcwd())
+    print(len(arr))
     if len(arr) >= 1: #avoid empty cases where files have been removed earlier
                       #or don't exist at all since the dictionary also contains
                       #pairs of objects and filters that didn't meet the swarp
