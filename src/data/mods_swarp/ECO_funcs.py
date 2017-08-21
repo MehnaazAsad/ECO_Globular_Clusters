@@ -233,7 +233,7 @@ def update_header(arr_imgs,obj1,filter_i):
             else:
                 fits.writeto(img+'_test_'+filter_i+'_.fits',data,hdulist[1].header,output_verify='ignore')
             hdulist.close()
-            os.chdir('../data/raw/'+obj1)
+            os.chdir('../raw/'+obj1)
         #This is to catch 'empty or corrupt FITS file' or any other IOError
         #and write it to a text file along with the object name and the 
         #filter name
