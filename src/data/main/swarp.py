@@ -31,6 +31,7 @@ ECO_dict,ECO_keys,ECOcat = foo.make_dict(ECOnew,goodObj)
 
 for index,key in enumerate(ECO_keys):
     print('Key {0}/{1}'.format(index+1,len(ECO_keys)))
+    print(key)
     obj = key[0]
     filter_i = key[1]
     dir_path = os.getcwd()

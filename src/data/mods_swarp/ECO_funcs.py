@@ -185,86 +185,92 @@ def update_header(arr_imgs,obj1,filter_i):
     Raises:
         IOError: if 'empty or corrupt FITS file' or 'file does not exist'
     """
-    for img in arr_imgs:
-        warnings.simplefilter('ignore', category=AstropyUserWarning)
-        try:
-            hdulist = fits.open(img,ignore_missing_end=True)
-            #if there is only a primary header get the data from it
-            if len(hdulist) == 1:
-                data = getdata(img, 0, header=False)
-            #if there is more than one header get data from the 'SCI' extension
-            else:
-                data = getdata(img, 1, header=False)
-            #Get value of EXPTIME keyword from primary header and set
-            #CCDGAIN to a default value of 1
-            EXPTIME = hdulist[0].header['EXPTIME']
-            CCDGAIN = 1.0
-            #First pass locating value for gain
-            for i in range(2):
+    #To avoid the cases where files don't exist for an object,filter pair
+    if len(arr_imgs) > 0:
+        for img in arr_imgs:
+            warnings.simplefilter('ignore', category=AstropyUserWarning)
+            try:
+                hdulist = fits.open(img,ignore_missing_end=True)
+                #if there is only a primary header get the data from it
                 if len(hdulist) == 1:
-                    break
-                #Go through primary and secondary header and ignore the 
-                #BinTable formatted header
-                if not isinstance(hdulist[i],astropy.io.fits.hdu.table.BinTableHDU):
-                    if 'CCDGAIN' in hdulist[i].header:
-                        CCDGAIN = hdulist[i].header['CCDGAIN']
+                    data = getdata(img, 0, header=False)
+                #if there is more than one header get data from the 'SCI' extension
+                else:
+                    data = getdata(img, 1, header=False)
+                #Get value of EXPTIME keyword from primary header and set
+                #CCDGAIN to a default value of 1
+                EXPTIME = hdulist[0].header['EXPTIME']
+                CCDGAIN = 1.0
+                #First pass locating value for gain
+                for i in range(2):
+                    if len(hdulist) == 1:
                         break
-                    if 'GAIN' in hdulist[i].header:
-                        CCDGAIN = hdulist[i].header['GAIN']
+                    #Go through primary and secondary header and ignore the 
+                    #BinTable formatted header
+                    if not isinstance(hdulist[i],astropy.io.fits.hdu.table.BinTableHDU):
+                        if 'CCDGAIN' in hdulist[i].header:
+                            CCDGAIN = hdulist[i].header['CCDGAIN']
+                            break
+                        if 'GAIN' in hdulist[i].header:
+                            CCDGAIN = hdulist[i].header['GAIN']
+                            break
+                
+                #Second pass to assign gain and exptime to headers
+                for i in range(2):
+                    if len(hdulist) == 1:
                         break
-            
-            #Second pass to assign gain and exptime to headers
-            for i in range(2):
+                    if not isinstance(hdulist[i],astropy.io.fits.hdu.table.BinTableHDU):
+                        if 'CCDGAIN' not in hdulist[i].header:
+                            hdulist[i].header.set('CCDGAIN',CCDGAIN)
+                        if 'EXPTIME' not in hdulist[i].header:
+                            hdulist[i].header.set('EXPTIME',EXPTIME)
+                #If there was only one header write that header's data to new
+                #version of fits image
+                
+                #Make new versions in interim/obj1 folder
+                os.chdir('../../interim/')
+                if not os.path.exists(obj1):
+                    os.makedirs(obj1)
+                    os.chdir(obj1)
+                #The second time around, for the same object but a different filter
+                #this folder already exists so just enter it
+                else:
+                    os.chdir(obj1)
                 if len(hdulist) == 1:
-                    break
-                if not isinstance(hdulist[i],astropy.io.fits.hdu.table.BinTableHDU):
-                    if 'CCDGAIN' not in hdulist[i].header:
-                        hdulist[i].header.set('CCDGAIN',CCDGAIN)
-                    if 'EXPTIME' not in hdulist[i].header:
-                        hdulist[i].header.set('EXPTIME',EXPTIME)
-            #If there was only one header write that header's data to new
-            #version of fits image
-            
-            #Make new versions in interim/obj1 folder
-            os.chdir('../../interim/')
-            if not os.path.exists(obj1):
-                os.makedirs(obj1)
+                    fits.writeto(img+'_test_'+filter_i+'_.fits',data,hdulist[0].header,output_verify='ignore')
+                #Else write the 'SCI' header's data to new version of fits image
+                else:
+                    fits.writeto(img+'_test_'+filter_i+'_.fits',data,hdulist[1].header,output_verify='ignore')
+                hdulist.close()
+            #This is to catch 'empty or corrupt FITS file' or any other IOError
+            #and write it to a text file along with the object name and the 
+            #filter name
+            except IOError as e:
+                os.chdir('../')
+                with open('Error_swarpfil.txt','a') as newfile:              
+                    newfile.write('Object {0} and image {1} raises {2} error'.format\
+                    (obj1,img,e))
+                    newfile.write('\n')
+                    newfile.close()
                 os.chdir(obj1)
-            if len(hdulist) == 1:
-                fits.writeto(img+'_test_'+filter_i+'_.fits',data,hdulist[0].header,output_verify='ignore')
-            #Else write the 'SCI' header's data to new version of fits image
-            else:
-                fits.writeto(img+'_test_'+filter_i+'_.fits',data,hdulist[1].header,output_verify='ignore')
-            hdulist.close()
-        #This is to catch 'empty or corrupt FITS file' or any other IOError
-        #and write it to a text file along with the object name and the 
-        #filter name
-        except IOError as e:
-            os.chdir('../')
-            with open('Error_swarpfil.txt','a') as newfile:              
-                newfile.write('Object {0} and image {1} raises {2} error'.format\
-                (obj1,img,e))
-                newfile.write('\n')
-                newfile.close()
-            os.chdir(obj1)
-    #For this object and filter combination grab all the new versions made
-    arr = glob('*test_'+filter_i+'_.fits')
-    if len(arr) >= 1: #avoid empty cases where files have been removed earlier
-                      #or don't exist at all since the dictionary also contains
-                      #pairs of objects and filters that didn't meet the swarp
-                      #requirements (didn't pass prelimary exptime or filter
-                      #checks so those folders/images don't exist
-                      
-        #If new versions exist then write their names to a text file 
-        with open(filter_i+'_img_list_testfil.txt','wb') as newfile2:
-            for obj in arr:
-                newfile2.write(obj)
-                newfile2.write('\n')
-            newfile2.close()
-        #If text file exists return the name
-        return filter_i+'_img_list_testfil.txt'
-    #If text file doesn't exist return this string
-    return 'error'
+        #For this object and filter combination grab all the new versions made
+        arr = glob('*test_'+filter_i+'_.fits')
+        if len(arr) >= 1: #avoid empty cases where files have been removed earlier
+                          #or don't exist at all since the dictionary also contains
+                          #pairs of objects and filters that didn't meet the swarp
+                          #requirements (didn't pass prelimary exptime or filter
+                          #checks so those folders/images don't exist
+                          
+            #If new versions exist then write their names to a text file 
+            with open(filter_i+'_img_list_testfil.txt','wb') as newfile2:
+                for obj in arr:
+                    newfile2.write(obj)
+                    newfile2.write('\n')
+                newfile2.close()
+            #If text file exists return the name
+            return filter_i+'_img_list_testfil.txt'
+        #If text file doesn't exist return this string
+        return 'error'
 
 def percent_blank(coadd,obj,filter_i):
     """
