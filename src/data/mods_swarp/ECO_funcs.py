@@ -224,6 +224,8 @@ def update_header(arr_imgs,obj1,filter_i):
                         hdulist[i].header.set('EXPTIME',EXPTIME)
             #If there was only one header write that header's data to new
             #version of fits image
+            
+            #Make new versions in interim/obj1 folder
             os.chdir('../../interim')
             if not os.path.exists(obj1):
                 os.makedirs(obj1)
@@ -238,11 +240,13 @@ def update_header(arr_imgs,obj1,filter_i):
         #and write it to a text file along with the object name and the 
         #filter name
         except IOError as e:
+            os.chdir('..')
             with open('Error_swarpfil.txt','a') as newfile:              
                 newfile.write('Object {0} and image {1} raises {2} error'.format\
                 (obj1,img,e))
                 newfile.write('\n')
                 newfile.close()
+            os.chdir(obj1)
     #For this object and filter combination grab all the new versions made
     arr = glob('*test_'+filter_i+'_.fits')
     if len(arr) >= 1: #avoid empty cases where files have been removed earlier
@@ -298,7 +302,8 @@ def percent_blank(coadd,obj,filter_i):
         #case the image is 0% blank
         percentage = 0
     print('Percentage blank {0}%'.format(percentage))
-    os.chdir('../../interim')
+    #Move back up to interim folder
+    os.chdir('..')
     #Write the percentage blank along with the object name and filter 
     #name to a text file
     with open('percent_blank.txt','a') as newfile:
