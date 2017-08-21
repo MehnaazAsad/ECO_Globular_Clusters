@@ -76,7 +76,9 @@ for index,key in enumerate(ECO_keys):
         foo.percent_blank(coadd,obj,filter_i)
         #So that you can distinguish between interim object folder and raw 
         #object filder
-    
+        
+    else:
+        os.chdir('..') # Moving one level up when no imgs are found
         
     #If the length of imgs is 1 then check if the new version that 
     #update_header function creates exists. If it does then calculate blank
