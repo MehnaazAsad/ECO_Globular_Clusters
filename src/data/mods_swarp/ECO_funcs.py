@@ -226,14 +226,7 @@ def update_header(arr_imgs,obj1,filter_i):
             #version of fits image
             
             #Make new versions in interim/obj1 folder
-            os.chdir('../../interim/')
-            if not os.path.exists(obj1):
-                os.makedirs(obj1)
-                os.chdir(obj1)
-            #The second time around, for the same object but a different filter
-            #this folder already exists 
-            else:
-                os.chdir(obj1)
+            os.chdir('../../interim/'+obj1)
             if len(hdulist) == 1:
                 fits.writeto(img+'_test_'+filter_i+'_.fits',data,hdulist[0].header,output_verify='ignore')
             #Else write the 'SCI' header's data to new version of fits image

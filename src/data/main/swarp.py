@@ -50,7 +50,7 @@ for index,key in enumerate(ECO_keys):
     #that contains the names of the new versions of the fits images being
     #input into the function
     img_list_txt = foo.update_header(imgs,obj,filter_i)
-
+'''
     #to check for case where all images were in Except clause of update_header
     #and run swarp even for single images
     if len(imgs) >= 1 and img_list_txt != 'error': 
@@ -85,4 +85,5 @@ for index,key in enumerate(ECO_keys):
 #        filename = imgs[0]+'_test_'+filter_i+'.fits'
 #        if os.path.exists(filename): #avoid empty cases where files don't exist 
 #            single_img = fits.open(filename)
-#            foo.percent_blank(single_img,obj,filter_i)           
+#            foo.percent_blank(single_img,obj,filter_i)      
+'''     
