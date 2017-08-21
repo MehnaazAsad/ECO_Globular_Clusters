@@ -249,7 +249,7 @@ def update_header(arr_imgs,obj1,filter_i):
                 newfile.close()
             os.chdir('../raw/'+obj1)
     #For this object and filter combination grab all the new versions made
-    os.chdir('../../interim')
+    os.chdir('../../interim/'+obj1)
     arr = glob('*test_'+filter_i+'_.fits')
     print(len(arr))
     if len(arr) >= 1: #avoid empty cases where files have been removed earlier
