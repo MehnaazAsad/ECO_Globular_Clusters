@@ -62,11 +62,14 @@ for index,obj in enumerate(objs_arr):
             #If it does match go to next iteration
             if key[0] and key[1] in coadd:
                 counter+=1 #At the end this should equal 92
+                print(key[0],key[1])
                 continue
             #If it doesn't match add it to the array of good coadds that will
             #be multiplied
             else:
+                print(key[0],key[1])
                 coadds_arr2.append(coadd)
+        
     
     #If after this check only one coadd remains then that means that object has 
     #imaging in less than one filter and it is no longer usable. This should be
