@@ -56,19 +56,19 @@ for index,obj in enumerate(objs_arr):
     #For a coadd check if it matches with the keys of 100% blank coadds
     print('Checking if coadd is 100% blank')
     counter = 0
+    blank = False
     coadds_arr2 = []
     for coadd in coadds_arr:
         for key in pblank100_keys:
-            #If it does match go to next iteration
             if key[0] and key[1] in coadd:
-                counter+=1 #At the end this should equal 92
-                continue
-            #If it doesn't match add it to the array of good coadds that will
-            #be multiplied
-            else:
-                coadds_arr2.append(coadd)
+                counter+=1
+                blank = True
+                break
+        if not blank:
+            coadds_arr2.append(coadd)
+            blank = False
         
-    print(np.unique(coadds_arr2))
+    print(coadds_arr2)
     
     #If after this check only one coadd remains then that means that object has 
     #imaging in less than one filter and it is no longer usable. This should be
