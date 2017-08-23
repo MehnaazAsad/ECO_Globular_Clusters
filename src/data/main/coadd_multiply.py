@@ -62,12 +62,14 @@ for index,obj in enumerate(objs_arr):
             #If it does match go to next iteration
             if key[0] and key[1] in coadd:
                 counter+=1 #At the end this should equal 92
-                print(key[0],key[1])
+                print('Woops, bad coadd')
+                print(coadd)
                 continue
             #If it doesn't match add it to the array of good coadds that will
             #be multiplied
             else:
-                print(key[0],key[1])
+                print('Yay, good coadd')
+                print(coadd)
                 coadds_arr2.append(coadd)
         
     
