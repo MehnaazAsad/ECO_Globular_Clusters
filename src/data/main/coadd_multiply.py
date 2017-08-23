@@ -68,7 +68,7 @@ for index,obj in enumerate(objs_arr):
             else:
                 coadds_arr2.append(coadd)
         
-    print(coadds_arr2)
+    print(np.unique(coadds_arr2))
     
     #If after this check only one coadd remains then that means that object has 
     #imaging in less than one filter and it is no longer usable. This should be
