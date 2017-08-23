@@ -57,8 +57,8 @@ for index,obj in enumerate(objs_arr):
     print('Checking if coadd is 100% blank')
     counter = 0
     coadds_arr2 = []
-    for key in pblank100_keys:
-        for coadd in coadds_arr2:
+    for coadd in coadds_arr:
+        for key in pblank100_keys:
             #If it does match go to next iteration
             if key[0] and key[1] in coadd:
                 counter+=1 #At the end this should equal 92
@@ -67,7 +67,7 @@ for index,obj in enumerate(objs_arr):
             #be multiplied
             else:
                 coadds_arr2.append(coadd)
-    
+        
     print(coadds_arr2)
     
     #If after this check only one coadd remains then that means that object has 
