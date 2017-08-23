@@ -60,7 +60,7 @@ for index,obj in enumerate(objs_arr):
     coadds_arr2 = []
     for coadd in coadds_arr:
         for key in pblank100_keys:
-            if key[0] and key[1] in coadd:
+            if key[0] in coadd and key[1] in coadd:
                 counter+=1
                 blank = True
                 break
