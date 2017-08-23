@@ -85,9 +85,9 @@ for index,obj in enumerate(objs_arr):
     if len(coadds_arr2) >= 2:
         print('Multiplying coadds')
         warnings.simplefilter('ignore', category=AstropyUserWarning)
-        hdu1 = fits.open(coadds_arr[0])
+        hdu1 = fits.open(coadds_arr2[0])
         warnings.simplefilter('ignore', category=AstropyUserWarning)
-        hdu2 = fits.open(coadds_arr[1])
+        hdu2 = fits.open(coadds_arr2[1])
         sci1 = hdu1[0].data
         sci2 = hdu2[0].data
         
