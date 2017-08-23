@@ -56,17 +56,18 @@ for index,obj in enumerate(objs_arr):
     #For a coadd check if it matches with the keys of 100% blank coadds
     print('Checking if coadd is 100% blank')
     counter = 0
-    blank = False
     coadds_arr2 = []
     for coadd in coadds_arr:
+        blank = False
         for key in pblank100_keys:
             if key[0] in coadd and key[1] in coadd:
                 counter+=1
                 blank = True
                 break
         if not blank:
-            coadds_arr2.append(coadd)
-            blank = False
+            coadds_arr2.append(coadd)    
+        
+        
         
     print(coadds_arr2)
     
