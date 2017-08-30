@@ -51,7 +51,8 @@ bad_obj = ['ECO03777', 'ECO03847', 'ECO04454', 'ECO06176', 'ECO06184', \
 for index,obj in enumerate(objs_arr):
     print('Object {0}/110'.format(index+1))
     if obj in bad_obj:
-        break
+        print('Bad object {0}'.format(obj))
+        continue
     dir_path = os.getcwd()
     if os.path.basename(dir_path) == 'main':
         os.chdir('../../../data/interim/'+obj)
