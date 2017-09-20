@@ -60,6 +60,9 @@ for index,obj in enumerate(objs_arr):
     elif os.path.basename(dir_path) != obj:
         os.chdir(obj)
     print('Getting all coadds')
+    
+    os.remove(obj+'comb_coadd.fits') #remove after run is complete
+    
     coadds_arr = glob('*coadd.fits')
     
     #For a coadd check if it matches with the keys of 100% blank coadds
