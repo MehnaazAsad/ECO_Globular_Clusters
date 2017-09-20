@@ -13,6 +13,7 @@ from glob import glob
 from astropy.io import fits
 import warnings
 from astropy.utils.exceptions import AstropyUserWarning
+from astropy import wcs
 
 goodObj = '../../../data/interim/goodObj.txt'
 percent_blank = '../../../data/interim/percent_blank.txt'
@@ -77,6 +78,8 @@ for index,obj in enumerate(objs_arr):
         print('Adding coadds')
         warnings.simplefilter('ignore', category=AstropyUserWarning)
         hdu1 = fits.open(coadds_arr2[0])
+        w = wcs.WCS(hdu1[0].header)
+        header = w.to_header()
         warnings.simplefilter('ignore', category=AstropyUserWarning)
         hdu2 = fits.open(coadds_arr2[1])
         sci1 = hdu1[0].data
@@ -94,7 +97,7 @@ for index,obj in enumerate(objs_arr):
         
         scidata_temp = scidata_temp/(len(coadds_arr2))
             
-        fits.writeto(obj+'comb_coadd.fits', scidata_temp, output_verify='ignore')
+        fits.writeto(obj+'comb_coadd.fits', scidata_temp, header, output_verify='ignore')
                 
         hdu1.close()
         hdu2.close()
