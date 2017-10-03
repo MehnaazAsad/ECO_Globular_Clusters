@@ -22,7 +22,7 @@ for index,obj in enumerate(objs_arr):
     print('Object {0}/110'.format(index+1))
     dir_path = os.getcwd()
     if os.path.basename(dir_path) == 'main':
-        os.chdir('../../../data/interim/'+obj)
+        os.chdir('../../../data/raw/'+obj)
     elif os.path.basename(dir_path) != obj:
         os.chdir(obj)
     
