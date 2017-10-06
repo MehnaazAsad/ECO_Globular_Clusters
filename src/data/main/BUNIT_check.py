@@ -35,7 +35,9 @@ for index,obj in enumerate(objs_arr):
         try:
             warnings.simplefilter('ignore', category=AstropyUserWarning)
             hdu = fits.open(image,ignore_missing_end = True)
+            
             if len(hdu) == 1:
+                print('Only one header')
                 hdr = hdu[0].header
             else:
                 hdr = hdu[1].header
@@ -43,6 +45,7 @@ for index,obj in enumerate(objs_arr):
                 bunit = hdr['BUNIT']
             else:
                 bunit = hdr['D001OUUN']
+                print('BUNIT not found. Instead using drizzle keyword.')
             os.chdir('/fs1/masad/Research/Repositories/ECO_Globular_Clusters/data/interim/')
             with open('BUNITresults.txt', 'a') as filename:
                 filename.write(bunit + '\n')
