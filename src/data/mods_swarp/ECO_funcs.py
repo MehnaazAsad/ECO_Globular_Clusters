@@ -212,6 +212,28 @@ def update_header(arr_imgs,obj1,filter_i):
                     if 'GAIN' in hdulist[i].header:
                         CCDGAIN = hdulist[i].header['GAIN']
                         break
+                    if 'ATODGAIN' in hdulist[i].header:
+                        CCDGAIN = hdulist[i].header['ATODGAIN']
+                        break
+              
+            for i in range(2):
+                if len(hdulist) == 1:
+                    bunit = hdulist[0].header['D001OUUN']
+                    if bunit == 'counts':
+                        data = data/EXPTIME
+                        hdulist[0].header.set('BUNIT','COUNTS/S')
+                else:
+                    if 'BUNIT' in hdulist[i].header:
+                        bunit = hdulist[i].header['BUNIT']
+                        if bunit == 'COUNTS':
+                            data = data/EXPTIME
+                        if bunit == 'ELECTRONS':
+                            data = data/(CCDGAIN*EXPTIME)
+                        if bunit == 'ELECTRONS/S':
+                            data = data/CCDGAIN
+                        if bunit == 'ELECTRONS/SEC':
+                            data = data/CCDGAIN
+                        hdulist[i].header['BUNIT'] = 'COUNTS/S'
             
             #Second pass to assign gain and exptime to headers
             for i in range(2):
@@ -228,10 +250,10 @@ def update_header(arr_imgs,obj1,filter_i):
             #Make new versions in interim/obj1 folder
             os.chdir('../../interim/'+obj1)
             if len(hdulist) == 1:
-                fits.writeto(img+'_test_'+filter_i+'_.fits',data,hdulist[0].header,output_verify='ignore')
+                fits.writeto(img+'_test_'+filter_i+'.fits',data,hdulist[0].header,output_verify='ignore')
             #Else write the 'SCI' header's data to new version of fits image
             else:
-                fits.writeto(img+'_test_'+filter_i+'_.fits',data,hdulist[1].header,output_verify='ignore')
+                fits.writeto(img+'_test_'+filter_i+'.fits',data,hdulist[1].header,output_verify='ignore')
             hdulist.close()
             os.chdir('../../raw/'+obj1)
         #This is to catch 'empty or corrupt FITS file' or any other IOError
@@ -250,7 +272,7 @@ def update_header(arr_imgs,obj1,filter_i):
             os.chdir('../raw/'+obj1)
     #For this object and filter combination grab all the new versions made
     os.chdir('../../interim/'+obj1)
-    arr = glob('*test_'+filter_i+'_.fits')
+    arr = glob('*test_'+filter_i+'.fits')
     print(len(arr))
     if len(arr) >= 1: #avoid empty cases where files have been removed earlier
                       #or don't exist at all since the dictionary also contains
