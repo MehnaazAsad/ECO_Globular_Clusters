@@ -10,6 +10,8 @@ import pandas as pd
 import os
 from astropy.io import fits
 from glob import glob
+import warnings
+from astropy.utils.exceptions import AstropyUserWarning
 
 goodObj = '../../../data/interim/goodObj.txt'
 #Read goodObj.txt
@@ -29,7 +31,8 @@ for index,obj in enumerate(objs_arr):
     arr = glob('*_*')
 
     for image in arr:
-        hdu = fits.open(image)
+        warnings.simplefilter('ignore', category=AstropyUserWarning)
+        hdu = fits.open(image,ignore_missing_end = True)
         hdr = hdu[1].header
         bunit = hdr['BUNIT']
         os.chdir('/fs1/masad/Research/Repositories/ECO_Globular_Clusters/data/interim/')
