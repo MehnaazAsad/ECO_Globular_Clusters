@@ -32,5 +32,8 @@ for index,obj in enumerate(objs_arr):
         hdu = fits.open(image)
         hdr = hdu[1].header
         bunit = hdr['BUNIT']
-        print(bunit)
+        with open('BUNITresults.txt', 'a') as filename:
+            filename.write(bunit + '\n')
         hdu.close()
+        
+    filename.close()
