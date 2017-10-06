@@ -16,7 +16,7 @@ from astropy.utils.exceptions import AstropyUserWarning
 from astropy import wcs
 
 goodObj = '../../../data/interim/goodObj.txt'
-percent_blank = '../../../data/interim/percent_blankv3.txt'
+percent_blank = '../../../data/interim/percent_blankv2.txt'
 
 #Read goodObj.txt
 filename1 = pd.read_csv(goodObj,header=None)
