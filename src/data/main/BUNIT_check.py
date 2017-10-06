@@ -22,6 +22,7 @@ objs_arr = filename1.ECO_ID.values
 
 for index,obj in enumerate(objs_arr):
     print('Object {0}/110'.format(index+1))
+    print(obj)
     dir_path = os.getcwd()
     if os.path.basename(dir_path) == 'main':
         os.chdir('../../../data/raw/'+obj)
