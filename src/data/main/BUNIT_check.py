@@ -46,6 +46,7 @@ for index,obj in enumerate(objs_arr):
             else:
                 bunit = hdr['D001OUUN']
                 print('BUNIT not found. Instead using drizzle keyword.')
+                print(bunit)
             os.chdir('/fs1/masad/Research/Repositories/ECO_Globular_Clusters/data/interim/')
             with open('BUNITresults.txt', 'a') as filename:
                 filename.write(bunit + '\n')
