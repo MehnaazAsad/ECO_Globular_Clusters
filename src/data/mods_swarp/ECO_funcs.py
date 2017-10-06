@@ -215,16 +215,20 @@ def update_header(arr_imgs,obj1,filter_i):
                     if 'ATODGAIN' in hdulist[i].header:
                         CCDGAIN = hdulist[i].header['ATODGAIN']
                         break
-              
+            
+            print('Doing BUNIT check')
             for i in range(2):
                 if len(hdulist) == 1:
                     bunit = hdulist[0].header['D001OUUN']
+                    print('BUNIT was {0}'.format(bunit))
                     if bunit == 'counts':
                         data = data/EXPTIME
                         hdulist[0].header.set('BUNIT','COUNTS/S')
+                        print('BUNIT is {0}'.format(hdulist[0].header['BUNIT']))
                 else:
                     if 'BUNIT' in hdulist[i].header:
                         bunit = hdulist[i].header['BUNIT']
+                        print('BUNIT was {0}'.format(bunit))
                         if bunit == 'COUNTS':
                             data = data/EXPTIME
                         if bunit == 'ELECTRONS':
@@ -234,6 +238,8 @@ def update_header(arr_imgs,obj1,filter_i):
                         if bunit == 'ELECTRONS/SEC':
                             data = data/CCDGAIN
                         hdulist[i].header['BUNIT'] = 'COUNTS/S'
+                        print('BUNIT is {0}'.format(hdulist[i].header['BUNIT']))
+            print('Done changing BUNIT')
             
             #Second pass to assign gain and exptime to headers
             for i in range(2):
