@@ -29,7 +29,7 @@ goodObj = '../../../data/interim/goodObj.txt'
 #and the formatted ECO catalog
 ECO_dict,ECO_keys,ECOcat = foo.make_dict(ECOnew,goodObj)
 
-for index,key in enumerate(ECO_keys):
+for index,key in enumerate(ECO_keys[0:1]):
     print('Key {0}/{1}'.format(index+1,len(ECO_keys)))
     print(key)
     obj = key[0]
@@ -63,11 +63,12 @@ for index,key in enumerate(ECO_keys):
         #filter name
         print('Starting to swarp')    
         subprocess.call(['swarp','@'+img_list_txt,'-CENTER_TYPE','MANUAL', \
-        '-CENTER',str(ra)+","+str(dec),'-NTHREADS','32', \
-        '-COMBINE_BUFSIZE','10000','-MEM_MAX','1000','-VMEM_MAX','5000',\
-        '-IMAGE_SIZE','3960','-GAIN_KEYWORD','CCDGAIN','-GAIN_DEFAULT','1.0',\
-        '-SUBTRACT_BACK','Y','-IMAGEOUT_NAME',obj+'_'+filter_i+'_'+'coadd.fits',\
-        '-WEIGHTOUT_NAME',obj+'_'+filter_i+'_'+'coadd.weight.fits','-XML_NAME',\
+        '-CENTER',str(ra)+","+str(dec),'-NTHREADS','32', '-COPY_KEYWORDS', \
+        'PHOTFLAM,PHOTZPT','-COMBINE_BUFSIZE','10000','-MEM_MAX','1000',\
+        '-VMEM_MAX','5000','-IMAGE_SIZE','3960','-GAIN_KEYWORD','CCDGAIN',\
+        '-GAIN_DEFAULT','1.0','-SUBTRACT_BACK','Y','-IMAGEOUT_NAME',\
+        obj+'_'+filter_i+'_'+'coadd.fits','-WEIGHTOUT_NAME',\
+        obj+'_'+filter_i+'_'+'coadd.weight.fits','-XML_NAME',\
         obj+'_'+filter_i+'_'+'swarp.xml'])
         print('Finished swarping')
         
