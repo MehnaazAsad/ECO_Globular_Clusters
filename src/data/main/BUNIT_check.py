@@ -39,7 +39,7 @@ for index,obj in enumerate(objs_arr):
                 hdr = hdu[0].header
             else:
                 hdr = hdu[1].header
-            if ['BUNIT'] in hdr:
+            if 'BUNIT' in hdr:
                 bunit = hdr['BUNIT']
             else:
                 bunit = hdr['D001OUUN']
