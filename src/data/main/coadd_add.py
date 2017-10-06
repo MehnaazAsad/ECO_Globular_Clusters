@@ -16,7 +16,7 @@ from astropy.utils.exceptions import AstropyUserWarning
 from astropy import wcs
 
 goodObj = '../../../data/interim/goodObj.txt'
-percent_blank = '../../../data/interim/percent_blank.txt'
+percent_blank = '../../../data/interim/percent_blankv3.txt'
 
 #Read goodObj.txt
 filename1 = pd.read_csv(goodObj,header=None)
@@ -49,7 +49,7 @@ bad_obj = ['ECO03777', 'ECO03847', 'ECO04454', 'ECO06176', 'ECO06184', \
 
 #Iterate through all object folders and add the coadds for that object 
 #only if it is not 100% blank
-for index,obj in enumerate(objs_arr):
+for index,obj in enumerate(objs_arr[0:1]):
     print('Object {0}/110'.format(index+1))
     if obj in bad_obj:
         print('Bad object {0}'.format(obj))
@@ -61,7 +61,7 @@ for index,obj in enumerate(objs_arr):
         os.chdir(obj)
     print('Getting all coadds')
     
-    os.remove(obj+'comb_coadd.fits') #remove after run is complete
+#    os.remove(obj+'comb_coadd.fits') #remove after run is complete
     
     coadds_arr = glob('*coadd.fits')
     
