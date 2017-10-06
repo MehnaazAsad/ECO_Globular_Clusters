@@ -32,8 +32,10 @@ for index,obj in enumerate(objs_arr):
         hdu = fits.open(image)
         hdr = hdu[1].header
         bunit = hdr['BUNIT']
+        os.chdir('/fs1/masad/Research/Repositories/ECO_Globular_Clusters/data/interim/')
         with open('BUNITresults.txt', 'a') as filename:
             filename.write(bunit + '\n')
         hdu.close()
+        os.chdir('../raw/'+obj)
         
     filename.close()
