@@ -35,8 +35,14 @@ for index,obj in enumerate(objs_arr):
         try:
             warnings.simplefilter('ignore', category=AstropyUserWarning)
             hdu = fits.open(image,ignore_missing_end = True)
-            hdr = hdu[1].header
-            bunit = hdr['BUNIT']
+            if len(hdu) == 1:
+                hdr = hdu[0].header
+            else:
+                hdr = hdu[1].header
+            if ['BUNIT'] in hdr:
+                bunit = hdr['BUNIT']
+            else:
+                bunit = hdr['D001OUUN']
             os.chdir('/fs1/masad/Research/Repositories/ECO_Globular_Clusters/data/interim/')
             with open('BUNITresults.txt', 'a') as filename:
                 filename.write(bunit + '\n')
