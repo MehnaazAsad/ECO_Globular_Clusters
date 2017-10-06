@@ -16,7 +16,7 @@ import numpy as np
 import os
 
 goodObj = '../../../data/interim/goodObj.txt'
-percent_blank = '../../../data/interim/percent_blank.txt'
+percent_blank = '../../../data/interim/percent_blankv2.txt'
 
 #Read goodObj.txt
 contents = pd.read_csv(goodObj,header=None)
@@ -77,7 +77,7 @@ for index,obj in enumerate(objs_arr):
     if len(coadds_arr2) <=1:
         print('{0} can no longer be used'.format(obj))
         os.chdir('..')
-        with open('percent_blank_combinedcoaddv2.txt','a') as newfile:
+        with open('percent_blank_combinedcoaddv3.txt','a') as newfile:
             newfile.write('{0} can no longer be used\n'.format(obj))
             newfile.close()
            
@@ -124,7 +124,7 @@ for index,obj in enumerate(objs_arr):
         print('Percentage blank {0}%'.format(percentage))
         
         os.chdir('..')      
-        with open('percent_blank_combinedcoaddv2.txt','a') as newfile:
+        with open('percent_blank_combinedcoaddv3.txt','a') as newfile:
             newfile.write('{0},{1}\n'.format(obj,percentage))
             newfile.close()
 
