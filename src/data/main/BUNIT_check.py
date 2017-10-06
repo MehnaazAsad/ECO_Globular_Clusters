@@ -24,7 +24,7 @@ for index,obj in enumerate(objs_arr):
     if os.path.basename(dir_path) == 'main':
         os.chdir('../../../data/raw/'+obj)
     elif os.path.basename(dir_path) != obj:
-        os.chdir(obj)
+        os.chdir('../'+obj)
     
     arr = glob('*_*')
 
