@@ -31,8 +31,10 @@ ECO_phot_cat  = pd.read_csv(ECOphotcat, delim_whitespace=True,header=None,\
                                               'gmag','rmag','imag','zmag',\
                                               'Jmag','Hmag','Kmag'])
 
-good_Obj_new = good_Obj.ECOID[:4].append(good_Obj.ECOID[5:11].append(good_Obj\
-                             .ECOID[104:105]))
+#good_Obj_new = good_Obj.ECOID[:4].append(good_Obj.ECOID[5:11].append(good_Obj\
+#                             .ECOID[104:105]))
+
+good_Obj_new = ['ECO12028']
 
 sdssr_calc = []
 sdssr_cat = []
