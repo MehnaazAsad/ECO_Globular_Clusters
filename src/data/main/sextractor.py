@@ -67,6 +67,7 @@ for obj in good_Obj_new:
     print('Converting to pixel coordinates')
     wcs = WCS(prihdr)   
     xx,yy = wcs.all_world2pix(ra,dec,1)
+    print(xx,yy)
     
 #remember to copy already uncommented default.param file and remove other one
 #remember to copy all default files to last obj in contents_new
@@ -94,8 +95,8 @@ for obj in good_Obj_new:
                                   'x_image','y_image','a_image','class_star'])
     
     print('Getting petro mag from test.cat')
-    print(f814w_cat.x_image)
-    print(f814w_cat.y_image)
+    print(f814w_cat.x_image==xx)
+    print(f814w_cat.y_image==yy)
     f814mag = f814w_cat.petro_mag.loc[(f814w_cat.x_image==xx)&(f814w_cat.y_image==yy)].values[0]
     
     print('Calculating rmag')
