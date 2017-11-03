@@ -68,6 +68,7 @@ for obj in good_Obj_new:
     
     print('Converting to pixel coordinates')
     wcs = WCS(prihdr)   
+    print(wcs)
     xx,yy = wcs.all_world2pix(ra,dec,1)
     print(xx,yy)
     
@@ -110,6 +111,7 @@ for obj in good_Obj_new:
     
     sdssr_calc.append(sdss_r)
     sdssr_cat.append(sdss_r_cat)
+    hdu_f814w_coadd.close()
 
 print('Plotting')
 x = np.linspace(0,len(good_Obj_new.values)+1,len(good_Obj_new.values))
