@@ -48,10 +48,10 @@ for obj in good_Obj_new:
     f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
     
     print('Starting source extractor')
-    subprocess.call(['sex ',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
-    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH', \
-    '1.5','-DETECT_MINAREA','9','-SEEING_FWHM','0.1'])
-#    '-CATALOG_NAME',obj+'acs_wfc_f814w.cat'])
+    subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
+    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
+    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1',\
+    '-CATALOG_NAME',obj+'acs_wfc_f814w.cat'])
     print('Finished running source extractor')
     
     hdu_f814w_coadd = fits.open(f814_coadd)  
