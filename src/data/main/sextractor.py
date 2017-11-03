@@ -100,7 +100,9 @@ for obj in good_Obj_new:
     print('Getting petro mag from test.cat')
     print(f814w_cat.x_image==xx)
     print(f814w_cat.y_image==yy)
-    f814mag = f814w_cat.petro_mag.loc[(f814w_cat.x_image==xx)&(f814w_cat.y_image==yy)].values[0]
+    f814mag = f814w_cat.petro_mag.loc[(np.abs(f814w_cat.x_image-xx)<2)&\
+                                      (np.abs(f814w_cat.y_image-yy)<2)]\
+                                      .values[0]
     
     print('Calculating rmag')
     f814mag += zpt814
