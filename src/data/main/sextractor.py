@@ -98,8 +98,8 @@ for obj in good_Obj_new:
                                   'x_image','y_image','a_image','class_star'])
     
     print('Getting petro mag from test.cat')
-    print(f814w_cat.x_image==xx)
-    print(f814w_cat.y_image==yy)
+#    print(f814w_cat.x_image==xx)
+#    print(f814w_cat.y_image==yy)
     f814mag = f814w_cat.petro_mag.loc[(np.abs(f814w_cat.x_image-xx)<2)&\
                                       (np.abs(f814w_cat.y_image-yy)<2)]\
                                       .values[0]
