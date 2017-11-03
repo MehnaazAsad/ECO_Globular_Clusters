@@ -50,19 +50,21 @@ for obj in good_Obj_new:
     print('Starting source extractor')
     subprocess.call(['sex ',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH', \
-    '1.5','-DETECT_MINAREA','9','-SEEING_FWHM','0.1',\
-    '-CATALOG_NAME',obj+'acs_wfc_f814w.cat'])
+    '1.5','-DETECT_MINAREA','9','-SEEING_FWHM','0.1'])
+#    '-CATALOG_NAME',obj+'acs_wfc_f814w.cat'])
     print('Finished running source extractor')
     
     hdu_f814w_coadd = fits.open(f814_coadd)  
     prihdr = hdu_f814w_coadd[0].header
     photflam814 = prihdr['PHOTFLAM']
     photzpt814 = prihdr['PHOTZPT']
+    print('Calculating zeropoint')
     zpt814 = -2.5*np.log10(photflam814) + photzpt814
 
     ra = np.unique(ECO_new.RA.loc[ECO_new.ECOID==obj])[0]
     dec = np.unique(ECO_new.DEC.loc[ECO_new.ECOID==obj])[0]
     
+    print('Converting to pixel coordinates')
     wcs = WCS(prihdr)   
     xx,yy = wcs.all_world2pix(ra,dec,1)
     
@@ -85,22 +87,27 @@ for obj in good_Obj_new:
 
 #need to use WCS
 
-    f814w_cat = pd.read_csv(obj+'acs_wfc_f814w',header=None,\
+    print('Reading test.cat')
+    f814w_cat = pd.read_csv('test.cat',header=None,\
                             delim_whitespace=True,skiprows=1,\
                             names=['petro_mag','petro_magerr','petro_radius',\
                                   'x_image','y_image','a_image','class_star'])
     
+    print('Getting petro mag from test.cat')
     f814mag = f814w_cat.petro_mag.loc[(f814w_cat.x_image==xx)&\
                                       (f814w_cat.y_image==yy)].values[0]
     
+    print('Calculating rmag')
     f814mag += zpt814
     sdss_r = f814mag - 1
     
+    print('Retrieving rmag from catalog')
     sdss_r_cat = ECO_phot_cat.rmag.loc[ECO_phot_cat.ECOID==obj].values[0]
     
     sdssr_calc.append(sdss_r)
     sdssr_cat.append(sdss_r_cat)
 
+print('Plotting')
 x = np.linspace(0,len(good_Obj_new.values)+1,len(good_Obj_new.values))
 my_xticks = good_Obj_new.values
 fig1 = plt.figure(figsize=(10,8))
