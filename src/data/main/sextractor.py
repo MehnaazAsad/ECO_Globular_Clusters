@@ -88,7 +88,7 @@ for obj in good_Obj_new:
 #need to use WCS
 
     print('Reading test.cat')
-    f814w_cat = pd.read_csv('test.cat',header=None,\
+    f814w_cat = pd.read_csv(obj+'acs_wfc_f814w.cat',header=None,\
                             delim_whitespace=True,skiprows=1,\
                             names=['petro_mag','petro_magerr','petro_radius',\
                                   'x_image','y_image','a_image','class_star'])
