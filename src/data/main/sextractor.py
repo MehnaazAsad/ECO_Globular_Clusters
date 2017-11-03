@@ -69,7 +69,7 @@ for obj in good_Obj_new:
     print('Converting to pixel coordinates')
     wcs = WCS(prihdr)   
     print(wcs)
-    xx,yy = wcs.wcs_world2pix(194.99,27.94,1)
+    xx,yy = wcs.wcs_world2pix(194.996,27.947,1)
     print(xx,yy)
     
 #remember to copy already uncommented default.param file and remove other one
