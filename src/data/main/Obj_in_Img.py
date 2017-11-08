@@ -64,14 +64,14 @@ for index,obj in enumerate(arr_goodObj):
     
     os.chdir('../')
     print('Writing results to text file')
-    with open('Obj_in_Img_results_rev.txt', 'a') as newfile:
+    with open('Obj_in_Img_results_rev2.txt', 'a') as newfile:
         newfile.write(obj+' :{0}/{1}\n'.format(good_img_counter,len_original))
     newfile.close()
 
 N = len(arr_goodObj)
 
 ind = np.arange(N)    # the x locations for the groups
-width = 5       # the width of the bars: can also be len(x) sequence
+width = 0.38       # the width of the bars: can also be len(x) sequence
 
 fig1 = plt.figure(figsize=(10,8))
 p1 = plt.bar(ind, arr_good_img_counter, width,color=(0.2588,0.4433,1.0))
