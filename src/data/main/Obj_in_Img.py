@@ -45,7 +45,7 @@ for index,obj in enumerate(arr_goodObj):
     for filename in arr_imgs:
         len_original = len(arr_imgs)
         hdulist = fits.open(filename)
-        header = hdulist[1].header
+        header = hdulist[0].header
         w = WCS(header)
         px,py = w.wcs_world2pix(RA,DEC,1)
         px = int(px)
