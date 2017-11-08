@@ -64,7 +64,7 @@ for index,obj in enumerate(arr_goodObj):
     
     os.chdir('../')
     print('Writing results to text file')
-    with open('Obj_in_Img_results.txt', 'a') as newfile:
+    with open('Obj_in_Img_results_rev.txt', 'a') as newfile:
         newfile.write(obj+' :{0}/{1}\n'.format(good_img_counter,len_original))
     newfile.close()
 
