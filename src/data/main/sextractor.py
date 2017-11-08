@@ -31,10 +31,10 @@ ECO_phot_cat  = pd.read_csv(ECOphotcat, delim_whitespace=True,header=None,\
                                               'gmag','rmag','imag','zmag',\
                                               'Jmag','Hmag','Kmag'])
 
-good_Obj_new = good_Obj.ECOID[:4].append(good_Obj.ECOID[5:11].append(good_Obj\
-                             .ECOID[104:105]))
+#good_Obj_new = good_Obj.ECOID[:4].append(good_Obj.ECOID[5:11].append(good_Obj\
+#                             .ECOID[104:105]))
 
-#good_Obj_new = ['ECO12028']
+good_Obj_new = ['ECO00026'] #REMOVE THIS
 
 sdssr_calc = []
 sdssr_cat = []
@@ -46,14 +46,14 @@ for obj in good_Obj_new:
     elif os.path.basename(dir_path) != obj:
         os.chdir('../interim/'+obj)
         
-    comb_coadd = glob(obj+'comb_coadd.fits')[0]
+    comb_coadd = glob(obj+'_comb_coadd.fits')[0]
     f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
     
     print('Starting source extractor')
     subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
     '-DETECT_MINAREA','9','-SEEING_FWHM','0.1',\
-    '-CATALOG_NAME',obj+'acs_wfc_f814w.cat'])
+    '-CATALOG_NAME',obj+'acs_wfc_f814w_scaletest.cat']) #CHANGE THIS
     print('Finished running source extractor')
     
     hdu_f814w_coadd = fits.open(f814_coadd)  
@@ -92,7 +92,8 @@ for obj in good_Obj_new:
 #need to use WCS
 
     print('Reading test.cat')
-    f814w_cat = pd.read_csv(obj+'acs_wfc_f814w.cat',header=None,\
+    #CHANGE NAME
+    f814w_cat = pd.read_csv(obj+'acs_wfc_f814w_scaletest.cat',header=None,\
                             delim_whitespace=True,skiprows=7,\
                             names=['petro_mag','petro_magerr','petro_radius',\
                                   'x_image','y_image','a_image','class_star'])
