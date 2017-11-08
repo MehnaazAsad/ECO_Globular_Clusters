@@ -11,6 +11,7 @@ from glob import glob
 import os
 import numpy as np
 from astropy.wcs import WCS
+import matplotlib.pyplot as plt
 
 ECOnew  = '../../../data/interim/ECO_formatted.txt'
 goodObj = '../../../data/interim/goodObj.txt'
@@ -22,6 +23,8 @@ good_Obj.columns = ['ECO_ID']
 #An array of the ECOIDs obtained from goodObj.txt
 arr_goodObj             = good_Obj.ECO_ID.values
 
+arr_good_img_counter = []
+arr_bad_img_counter = []
 for index,obj in enumerate(arr_goodObj):
     print('Object {0}/{1}'.format(index+1,len(arr_goodObj)))
     print(obj)
@@ -55,9 +58,29 @@ for index,obj in enumerate(arr_goodObj):
             good_img_counter += 1
         hdulist.close()
     
+    bad_imgs = len_original - good_img_counter
+    arr_good_img_counter.append(good_img_counter)
+    arr_bad_img_counter.append(bad_imgs)
+    
     os.chdir('../')
     print('Writing results to text file')
     with open('Obj_in_Img_results.txt', 'a') as newfile:
         newfile.write(obj+' :{0}/{1}\n'.format(good_img_counter,len_original))
     newfile.close()
+
+N = len(arr_goodObj)
+
+ind = np.arange(N)    # the x locations for the groups
+width = 0.35       # the width of the bars: can also be len(x) sequence
+
+p1 = plt.bar(ind, arr_good_img_counter, width)
+p2 = plt.bar(ind, arr_bad_img_counter, width,
+             bottom=arr_good_img_counter)
+
+plt.ylabel('Number of images')
+plt.title('Image count')
+plt.xticks(ind, arr_goodObj)
+plt.legend((p1[0], p2[0]), ('good images', 'bad_images'))
+
+plt.savefig('Obj_in_Img_results.png')
         
