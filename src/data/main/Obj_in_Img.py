@@ -71,8 +71,9 @@ for index,obj in enumerate(arr_goodObj):
 N = len(arr_goodObj)
 
 ind = np.arange(N)    # the x locations for the groups
-width = 0.35       # the width of the bars: can also be len(x) sequence
+width = 5       # the width of the bars: can also be len(x) sequence
 
+fig1 = plt.figure(figsize=(10,8))
 p1 = plt.bar(ind, arr_good_img_counter, width,color=(0.2588,0.4433,1.0))
 p2 = plt.bar(ind, arr_bad_img_counter, width,color=(1.0,0.5,0.62),\
              bottom=arr_good_img_counter)
