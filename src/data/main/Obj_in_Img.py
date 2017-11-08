@@ -73,13 +73,13 @@ N = len(arr_goodObj)
 ind = np.arange(N)    # the x locations for the groups
 width = 0.35       # the width of the bars: can also be len(x) sequence
 
-p1 = plt.bar(ind, arr_good_img_counter, width)
-p2 = plt.bar(ind, arr_bad_img_counter, width,
+p1 = plt.bar(ind, arr_good_img_counter, width,color=(0.2588,0.4433,1.0))
+p2 = plt.bar(ind, arr_bad_img_counter, width,color=(1.0,0.5,0.62),\
              bottom=arr_good_img_counter)
 
 plt.ylabel('Number of images')
 plt.title('Image count')
-plt.xticks(ind, arr_goodObj)
+plt.xticks(ind, arr_goodObj, rotation=90)
 plt.legend((p1[0], p2[0]), ('good images', 'bad_images'))
 
 plt.savefig('Obj_in_Img_results.png')
