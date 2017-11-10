@@ -87,7 +87,7 @@ for index,obj in enumerate(arr_goodObj):
             ECO_match.append(key) #"good" keys
             final_good_img_arr.append(ECOID_groups.get_group(key).new_filename)
     
-#    print(final_good_img_arr)
+    print(np.array(final_good_img_arr))
 #    print(np.ravel(final_good_img_arr))
     
     final_good_img_num = np.array(final_good_img_arr).size
