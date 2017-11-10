@@ -90,7 +90,7 @@ for index,obj in enumerate(arr_goodObj):
 #    print(final_good_img_arr)
 #    print(np.ravel(final_good_img_arr))
     
-    final_good_img_num = len(np.array(final_good_img_arr).flatten())
+    final_good_img_num = np.array(final_good_img_arr).size
     
     if len(ECO_match) >= 2:
         filter_num = len(ECO_match)
