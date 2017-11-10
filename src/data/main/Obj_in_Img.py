@@ -87,13 +87,8 @@ for index,obj in enumerate(arr_goodObj):
         if ECOID_groups.get_group(key).exptime.sum() >= exp_fil_dict[key]: #exptime check
             ECO_match.append(key) #"good" keys
             final_good_img_arr.append(ECOID_groups.get_group(key).new_filename)
-    
-    print(len(final_good_img_arr))
-    print(final_good_img_arr)
-    print(sum(len(x) for x in final_good_img_arr))
-#    print(np.ravel(final_good_img_arr))
-    
-    final_good_img_num = np.array(final_good_img_arr).size
+        
+    final_good_img_num = sum(len(x) for x in final_good_img_arr)
     
     if len(ECO_match) >= 2:
         filter_num = len(ECO_match)
