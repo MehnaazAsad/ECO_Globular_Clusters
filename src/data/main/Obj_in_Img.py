@@ -87,8 +87,9 @@ for index,obj in enumerate(arr_goodObj):
             ECO_match.append(key) #"good" keys
             final_good_img_arr.append(ECOID_groups.get_group(key).new_filename)
     
-    if len(final_good_img_arr) > 0:
-        final_good_img_num = len(np.ravel(final_good_img_arr))
+    print(final_good_img_arr)
+    print(np.ravel(final_good_img_arr))
+    final_good_img_num = len(np.ravel(final_good_img_arr))
     
     if len(ECO_match) >= 2:
         filter_num = len(ECO_match)
