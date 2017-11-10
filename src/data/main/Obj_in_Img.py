@@ -89,6 +89,7 @@ for index,obj in enumerate(arr_goodObj):
             final_good_img_arr.append(ECOID_groups.get_group(key).new_filename)
     
     print(len(final_good_img_arr))
+    print(final_good_img_arr)
     print(sum(len(x) for x in final_good_img_arr))
 #    print(np.ravel(final_good_img_arr))
     
