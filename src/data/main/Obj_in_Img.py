@@ -63,6 +63,9 @@ for index,obj in enumerate(arr_goodObj):
         if px <= header['NAXIS1'] and px >= 0 and py <= header['NAXIS2'] and \
         py >= 0:
             good_img_counter += 1
+            with open(obj+'_goodimages.txt','a') as newfile:
+                newfile.write(image+'\n')
+            newfile.close()
             new_filename = image.split('_test')[0]
             good_img_arr.append(new_filename)
         hdulist.close()
