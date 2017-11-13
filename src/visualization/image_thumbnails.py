@@ -9,7 +9,9 @@ Created on Sun Nov 12 23:31:42 2017
 from PIL import Image
 from glob import glob
 from fpdf import FPDF
+import os
 
+os.chdir('/fs1/masad/Research/Repositories/ECO_Globular_Clusters/data/interim/ECO00026')
 size = 1600,1600
 files = ['hlsp_coma_hst_acs-wfc_v24_f475w_v1_ivm-drz-cl_test_acs_wfc_f475w.fits',
 'hst_10861_18_acs_wfc_f475w_test_acs_wfc_f475w.fits',
