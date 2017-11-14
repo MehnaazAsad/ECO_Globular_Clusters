@@ -150,8 +150,6 @@ def make_dict(ECOnew,goodObj):
     #An array of the ECOIDs obtained from goodObj.txt
     arr1             = good_Obj.ECO_ID.values
     
-    arr1 = arr1[:1]#REMOVE THIS AFTER TESTING
-    
     #Creates a new dataframe where you grab all the columns that match ECOID
     #in goodObj with ECOID in the formatted ECO catalog
     ECOnew_goodObj = ECO_new.loc[ECO_new.ECOID.isin(arr1), : ]
@@ -272,7 +270,7 @@ def update_header(arr_imgs,obj1,filter_i):
             dir_path = os.getcwd()
             if os.path.basename(dir_path) == 'raw':
                 os.chdir('../interim')
-            with open('Error_swarpfil_scalecheck.txt','a') as newfile: #CHANGE NAME            
+            with open('Error_swarpfilv2.txt','a') as newfile:              
                 newfile.write('Object {0} and image {1} raises {2} error'.format\
                 (obj1,img,e))
                 newfile.write('\n')
@@ -339,7 +337,7 @@ def percent_blank(coadd,obj,filter_i):
     os.chdir('..')
     #Write the percentage blank along with the object name and filter 
     #name to a text file
-    with open('percent_blank_scalecheck.txt','a') as newfile: #CHANGE FILENAME
+    with open('percent_blankv2.txt','a') as newfile:
         newfile.write('{0},{1},{2}%\n'.format(obj,filter_i,percentage))
         newfile.close()
 
