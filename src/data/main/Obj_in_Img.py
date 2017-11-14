@@ -62,12 +62,15 @@ for index,obj in enumerate(arr_goodObj):
         py = int(py)
         if px <= header['NAXIS1'] and px >= 0 and py <= header['NAXIS2'] and \
         py >= 0:
-            good_img_counter += 1
-            with open(obj+'_goodimages.txt','a') as newfile:
-                newfile.write(image+'\n')
-            newfile.close()
-            new_filename = image.split('_test')[0]
-            good_img_arr.append(new_filename)
+            scidata = hdulist[0].data
+            val_at_pix = scidata[py-1,px-1]
+            if val_at_pix != 0:
+                good_img_counter += 1
+                with open(obj+'_goodimages.txt','a') as newfile:
+                    newfile.write(image+'\n')
+                newfile.close()
+                new_filename = image.split('_test')[0]
+                good_img_arr.append(new_filename)
         hdulist.close()
     
     arr_good_img_counter.append(good_img_counter)    
