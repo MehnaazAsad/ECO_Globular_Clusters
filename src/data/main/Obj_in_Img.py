@@ -66,10 +66,10 @@ for index,obj in enumerate(arr_goodObj):
             val_at_pix = scidata[py-1,px-1]
             if val_at_pix != 0:
                 good_img_counter += 1
-                with open(obj+'_goodimages.txt','a') as newfile:
-                    newfile.write(image+'\n')
-                newfile.close()
                 new_filename = image.split('_test')[0]
+                with open(obj+'_goodimages.txt','w') as newfile:
+                    newfile.write(new_filename+'\n')
+                newfile.close()
                 good_img_arr.append(new_filename)
         hdulist.close()
     
@@ -77,7 +77,7 @@ for index,obj in enumerate(arr_goodObj):
     
     os.chdir('../')
     print('Writing results to text file')
-    with open('Obj_in_Img_results.txt', 'a') as newfile:
+    with open('Obj_in_Img_results.txt', 'w') as newfile:
         newfile.write(obj+' {0} {1}\n'.format(good_img_counter,len_original))
     newfile.close()
     
@@ -97,11 +97,11 @@ for index,obj in enumerate(arr_goodObj):
     
     if len(ECO_match) >= 2:
         filter_num = len(ECO_match)
-        with open('Expfil2_results_good.txt', 'a') as newfile:
+        with open('Expfil2_results_good.txt', 'w') as newfile:
             newfile.write(obj+' {0} {1} {2}\n'.format(final_good_img_num,\
                           len_original,filter_num))
     else:
-        with open('Expfil2_results_bad.txt', 'a') as newfile:
+        with open('Expfil2_results_bad.txt', 'w') as newfile:
             newfile.write(obj+'\n')
     
     
