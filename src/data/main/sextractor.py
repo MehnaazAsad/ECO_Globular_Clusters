@@ -127,7 +127,7 @@ for obj in good_Obj_new:
     hdu_f814w_coadd.close()
 
 print('Plotting')
-x = np.linspace(0,len(good_Obj_new.values)+1,len(good_Obj_new.values))
+x = np.linspace(0,len(good_Obj_new)+1,len(good_Obj_new))
 my_xticks = good_Obj_new.values
 fig1 = plt.figure(figsize=(10,8))
 plt.xticks(x, my_xticks,rotation=90)
