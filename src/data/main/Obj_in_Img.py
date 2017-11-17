@@ -46,8 +46,8 @@ for index,obj in enumerate(arr_goodObj):
     elif os.path.basename(dir_path) != obj:
         os.chdir(obj)
     
-    if os.path.isfile('../../interim/'+obj+'_goodimages.txt'): 
-        os.remove('../../interim/'+obj+'_goodimages.txt')
+    if os.path.isfile('../../interim/'+obj+'/'+obj+'_goodimages.txt'): 
+        os.remove('../../interim/'+obj+'/'+obj+'_goodimages.txt')
     
     arr_imgs = glob('*.fits')
     
