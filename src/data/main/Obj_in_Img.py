@@ -62,14 +62,20 @@ for index,obj in enumerate(arr_goodObj):
         warnings.simplefilter('ignore', category=AstropyUserWarning)
         try:
             hdulist = fits.open(image,ignore_missing_end=True)
-            header = hdulist[1].header
+            if len(hdulist) == 1:
+                header = hdulist[0].header
+            else:
+                header = hdulist[1].header
             w = WCS(header)
             px,py = w.wcs_world2pix(RA,DEC,1)
             px = int(px)
             py = int(py)
             if px <= header['NAXIS1'] and px >= 0 and py <= header['NAXIS2'] and \
             py >= 0:
-                scidata = hdulist[1].data
+                if len(hdulist) == 1:
+                    scidata = hdulist[0].data
+                else:
+                    scidata = hdulist[1].data
                 val_at_pix = scidata[py-1,px-1]
                 if val_at_pix != 0:
                     good_img_counter += 1
