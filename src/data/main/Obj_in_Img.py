@@ -79,12 +79,10 @@ for index,obj in enumerate(arr_goodObj):
                 val_at_pix = scidata[py-1,px-1]
                 if val_at_pix != 0:
                     good_img_counter += 1
-                    os.chdir('../../interim/'+obj)
                     new_filename = os.path.splitext(image)[0]
                     with open(obj+'_goodimages.txt','a') as newfile:
                         newfile.write(new_filename+'\n')
                     newfile.close()
-                    os.chdir('../../raw/'+obj)
                     good_img_arr.append(new_filename)
             hdulist.close()
         except IOError as e:
