@@ -11,6 +11,8 @@ from glob import glob
 import os
 import numpy as np
 from astropy.wcs import WCS
+import warnings
+from astropy.utils.exceptions import AstropyUserWarning
 
 ECOnew  = '../../../data/interim/ECO_formatted.txt'
 goodObj = '../../../data/interim/goodObj.txt'
@@ -44,6 +46,9 @@ for index,obj in enumerate(arr_goodObj):
     elif os.path.basename(dir_path) != obj:
         os.chdir(obj)
     
+    if os.path.isfile(obj+'_goodimages.txt'): 
+        os.remove(obj+'_goodimages.txt')
+    
     arr_imgs = glob('*.fits')
     
     RA = np.unique(ECO_new.RA.loc[ECO_new.ECOID==obj])[0]
@@ -54,7 +59,8 @@ for index,obj in enumerate(arr_goodObj):
     good_img_arr = []
     for image in arr_imgs:
         len_original = len(arr_imgs)
-        hdulist = fits.open(image)
+        warnings.simplefilter('ignore', category=AstropyUserWarning)
+        hdulist = fits.open(image,ignore_missing_end=True)
         header = hdulist[1].header
         w = WCS(header)
         px,py = w.wcs_world2pix(RA,DEC,1)
@@ -67,7 +73,7 @@ for index,obj in enumerate(arr_goodObj):
             if val_at_pix != 0:
                 good_img_counter += 1
                 os.chdir('../../interim/'+obj)
-                with open(obj+'_goodimages.txt','w') as newfile:
+                with open(obj+'_goodimages.txt','a') as newfile:
                     newfile.write(image+'\n')
                 newfile.close()
                 os.chdir('../../raw/'+obj)
@@ -78,7 +84,7 @@ for index,obj in enumerate(arr_goodObj):
     
     os.chdir('../../interim')
     print('Writing results to text file')
-    with open('Obj_in_Img_results.txt', 'w') as newfile:
+    with open('Obj_in_Img_results.txt', 'a') as newfile:
         newfile.write(obj+' {0} {1}\n'.format(good_img_counter,len_original))
     newfile.close()
     
@@ -98,11 +104,11 @@ for index,obj in enumerate(arr_goodObj):
     
     if len(ECO_match) >= 2:
         filter_num = len(ECO_match)
-        with open('Expfil2_results_good.txt', 'w') as newfile:
+        with open('Expfil2_results_good.txt', 'a') as newfile:
             newfile.write(obj+' {0} {1} {2}\n'.format(final_good_img_num,\
                           len_original,filter_num))
     else:
-        with open('Expfil2_results_bad.txt', 'w') as newfile:
+        with open('Expfil2_results_bad.txt', 'a') as newfile:
             newfile.write(obj+'\n')
     
     os.chdir('../raw/')
