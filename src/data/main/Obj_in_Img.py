@@ -89,7 +89,7 @@ for index,obj in enumerate(arr_goodObj):
                 newfile.write('Object {0} and image {1} raises {2} error.\n'.format\
                 (obj,image,e))
             newfile.close()
-            os.chdir('../raw'+obj)
+            os.chdir('../raw/'+obj)
     
     arr_good_img_counter.append(good_img_counter)    
     
