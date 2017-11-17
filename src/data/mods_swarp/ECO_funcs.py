@@ -256,6 +256,7 @@ def update_header(arr_imgs,obj1,filter_i):
             
             #Make new versions in interim/obj1 folder
             os.chdir('../../interim/'+obj1)
+            img = os.path.splitext(img)[0]
             if len(hdulist) == 1:
                 fits.writeto(img+'_test_'+filter_i+'.fits',data,hdulist[0].header,output_verify='ignore')
             #Else write the 'SCI' header's data to new version of fits image
