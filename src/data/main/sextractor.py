@@ -93,7 +93,7 @@ for obj in good_Obj_new:
 
     print('Reading test.cat')
     #CHANGE NAME
-    f814w_cat = pd.read_csv(obj+'acs_wfc_f814w.cat',header=None,\
+    f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
                             delim_whitespace=True,skiprows=7,\
                             names=['petro_mag','petro_magerr','petro_radius',\
                                   'x_image','y_image','a_image','class_star'])
