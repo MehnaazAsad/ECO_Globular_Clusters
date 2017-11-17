@@ -39,7 +39,7 @@ good_Obj_new = ['ECO00026'] #REMOVE THIS
 sdssr_calc = []
 sdssr_cat = []
 for obj in good_Obj_new:
-    print(obj)
+    print('{0}/{1}'.format(obj,len(good_Obj_new)))
     dir_path = os.getcwd()
     if os.path.basename(dir_path) == 'main':
         os.chdir('../../../data/interim/'+obj)
