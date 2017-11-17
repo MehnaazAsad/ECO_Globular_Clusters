@@ -96,13 +96,17 @@ for obj in good_Obj_new:
     f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
                             delim_whitespace=True,skiprows=7,\
                             names=['petro_mag','petro_magerr','petro_radius',\
-                                  'x_image','y_image','a_image','class_star'])
+                                   'xmin_image','ymin_image','xmax_image',\
+                                   'ymax_image','x_image','y_image','a_image',\
+                                   'class_star'])
     
     print('Getting petro mag from test.cat')
 #    print(f814w_cat.x_image==xx)
 #    print(f814w_cat.y_image==yy)
-    f814mag = f814w_cat.petro_mag.loc[(np.abs(f814w_cat.x_image==xx))&\
-                                      (np.abs(f814w_cat.y_image==yy))]\
+    f814mag = f814w_cat.petro_mag.loc[(f814w_cat.xmin_image < xx < \
+                                       f814w_cat.xmax_image)&\
+                                      (f814w_cat.ymin_image < yy < \
+                                       f814w_cat.ymax_image)]\
                                       .values[0]
     
     print('Calculating rmag')
