@@ -60,25 +60,36 @@ for index,obj in enumerate(arr_goodObj):
     for image in arr_imgs:
         len_original = len(arr_imgs)
         warnings.simplefilter('ignore', category=AstropyUserWarning)
-        hdulist = fits.open(image,ignore_missing_end=True)
-        header = hdulist[1].header
-        w = WCS(header)
-        px,py = w.wcs_world2pix(RA,DEC,1)
-        px = int(px)
-        py = int(py)
-        if px <= header['NAXIS1'] and px >= 0 and py <= header['NAXIS2'] and \
-        py >= 0:
-            scidata = hdulist[1].data
-            val_at_pix = scidata[py-1,px-1]
-            if val_at_pix != 0:
-                good_img_counter += 1
-                os.chdir('../../interim/'+obj)
-                with open(obj+'_goodimages.txt','a') as newfile:
-                    newfile.write(image+'\n')
-                newfile.close()
-                os.chdir('../../raw/'+obj)
-                good_img_arr.append(image)
-        hdulist.close()
+        try:
+            hdulist = fits.open(image,ignore_missing_end=True)
+            header = hdulist[1].header
+            w = WCS(header)
+            px,py = w.wcs_world2pix(RA,DEC,1)
+            px = int(px)
+            py = int(py)
+            if px <= header['NAXIS1'] and px >= 0 and py <= header['NAXIS2'] and \
+            py >= 0:
+                scidata = hdulist[1].data
+                val_at_pix = scidata[py-1,px-1]
+                if val_at_pix != 0:
+                    good_img_counter += 1
+                    os.chdir('../../interim/'+obj)
+                    new_filename = os.path.splitext(image)[0]
+                    with open(obj+'_goodimages.txt','a') as newfile:
+                        newfile.write(new_filename+'\n')
+                    newfile.close()
+                    os.chdir('../../raw/'+obj)
+                    good_img_arr.append(new_filename)
+            hdulist.close()
+        except IOError as e:
+            dir_path = os.getcwd()
+            if os.path.basename(dir_path) == obj:
+                os.chdir('../../interim/')
+            with open('Error_objinimg.txt','a') as newfile:              
+                newfile.write('Object {0} and image {1} raises {2} error.\n'.format\
+                (obj,image,e))
+            newfile.close()
+            os.chdir('../raw'+obj)
     
     arr_good_img_counter.append(good_img_counter)    
     
