@@ -114,6 +114,7 @@ for obj in good_Obj_new:
                                        f814w_cat.ymax_image))]\
                                       .values[0]
     f814mag = pd.to_numeric(f814mag)
+    print(f814mag)
     
     print('Calculating rmag')
     f814mag += zpt814
@@ -128,7 +129,7 @@ for obj in good_Obj_new:
 
 print('Plotting')
 x = np.linspace(0,len(good_Obj_new)+1,len(good_Obj_new))
-my_xticks = good_Obj_new.values
+my_xticks = good_Obj_new
 fig1 = plt.figure(figsize=(10,8))
 plt.xticks(x, my_xticks,rotation=90)
 plt.scatter(x,sdssr_calc, c='r',label='calculated rmag')
