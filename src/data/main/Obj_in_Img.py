@@ -36,15 +36,15 @@ for index,obj in enumerate(arr_goodObj):
     print(obj)
     dir_path = os.getcwd()
     #Since this file is in src/ and we need to access the images we have to 
-    #move to the data/interim folder the first time this code runs
+    #move to the data/raw folder the first time this code runs
     if os.path.basename(dir_path) == 'main':
-        os.chdir('../../../data/interim/'+obj)
+        os.chdir('../../../data/raw/'+obj)
     #After the first time all that has to be done is to move out of the  
     #interim ECO object dir and into the next interim ECO object dir
     elif os.path.basename(dir_path) != obj:
         os.chdir(obj)
     
-    arr_imgs = glob('*_test_*')
+    arr_imgs = glob('*.fits')
     
     RA = np.unique(ECO_new.RA.loc[ECO_new.ECOID==obj])[0]
     DEC = np.unique(ECO_new.DEC.loc[ECO_new.ECOID==obj])[0]
@@ -55,27 +55,28 @@ for index,obj in enumerate(arr_goodObj):
     for image in arr_imgs:
         len_original = len(arr_imgs)
         hdulist = fits.open(image)
-        header = hdulist[0].header
+        header = hdulist[1].header
         w = WCS(header)
         px,py = w.wcs_world2pix(RA,DEC,1)
         px = int(px)
         py = int(py)
         if px <= header['NAXIS1'] and px >= 0 and py <= header['NAXIS2'] and \
         py >= 0:
-            scidata = hdulist[0].data
+            scidata = hdulist[1].data
             val_at_pix = scidata[py-1,px-1]
             if val_at_pix != 0:
                 good_img_counter += 1
-                new_filename = image.split('_test')[0]
+                os.chdir('../../interim/'+obj)
                 with open(obj+'_goodimages.txt','w') as newfile:
-                    newfile.write(new_filename+'\n')
+                    newfile.write(image+'\n')
                 newfile.close()
-                good_img_arr.append(new_filename)
+                os.chdir('../../raw/'+obj)
+                good_img_arr.append(image)
         hdulist.close()
     
     arr_good_img_counter.append(good_img_counter)    
     
-    os.chdir('../')
+    os.chdir('../../interim')
     print('Writing results to text file')
     with open('Obj_in_Img_results.txt', 'w') as newfile:
         newfile.write(obj+' {0} {1}\n'.format(good_img_counter,len_original))
@@ -104,5 +105,6 @@ for index,obj in enumerate(arr_goodObj):
         with open('Expfil2_results_bad.txt', 'w') as newfile:
             newfile.write(obj+'\n')
     
+    os.chdir('../raw/')
     
     
