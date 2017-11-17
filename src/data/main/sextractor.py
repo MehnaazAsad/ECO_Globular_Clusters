@@ -108,9 +108,9 @@ for obj in good_Obj_new:
     print('Getting petro mag from test.cat')
 #    print(f814w_cat.x_image==xx)
 #    print(f814w_cat.y_image==yy)
-    f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < xx)&(xx < \
+    f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
                                        f814w_cat.xmax_image))&\
-                                      ((f814w_cat.ymin_image < yy)&(yy < \
+                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
                                        f814w_cat.ymax_image))]\
                                       .values[0]
     f814mag = pd.to_numeric(f814mag)
