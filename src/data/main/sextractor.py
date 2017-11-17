@@ -100,14 +100,20 @@ for obj in good_Obj_new:
                                    'ymax_image','x_image','y_image','a_image',\
                                    'class_star'])
     
+    f814w_cat['xmin_image'] = pd.to_numeric(f814w_cat['xmin_image'],errors='coerce')
+    f814w_cat['ymin_image'] = pd.to_numeric(f814w_cat['ymin_image'],errors='coerce')
+    f814w_cat['xmax_image'] = pd.to_numeric(f814w_cat['xmax_image'],errors='coerce')
+    f814w_cat['ymax_image'] = pd.to_numeric(f814w_cat['ymax_image'],errors='coerce')
+    
     print('Getting petro mag from test.cat')
 #    print(f814w_cat.x_image==xx)
 #    print(f814w_cat.y_image==yy)
-    f814mag = f814w_cat.petro_mag.loc[(f814w_cat.xmin_image < xx < \
-                                       f814w_cat.xmax_image)&\
-                                      (f814w_cat.ymin_image < yy < \
-                                       f814w_cat.ymax_image)]\
+    f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < xx)&(xx < \
+                                       f814w_cat.xmax_image))&\
+                                      ((f814w_cat.ymin_image < yy)&(yy < \
+                                       f814w_cat.ymax_image))]\
                                       .values[0]
+    f814mag = pd.to_numeric(f814mag)
     
     print('Calculating rmag')
     f814mag += zpt814
