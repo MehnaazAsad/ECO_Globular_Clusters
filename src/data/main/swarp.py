@@ -61,9 +61,9 @@ for index,key in enumerate(ECO_keys):
     print("Common images are")
     imgs = []
     for img in imgs_from_cat:
-        img = img + '.fits'
         if img in imgs_from_txt:
             print(img)
+            img = img + '.fits'
             imgs.append(img)
         
     #Using the update_header function to output the name of the text file
