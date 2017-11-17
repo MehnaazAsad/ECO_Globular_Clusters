@@ -46,7 +46,26 @@ for index,key in enumerate(ECO_keys):
         os.chdir('../raw/'+obj)
     #Using the ECOID,filter key to acess the values in the new_filename column
     #i.e. get a list of the images associated with this key pair
-    imgs = ECO_dict.get_group(key)['new_filename'].values
+    print("Getting images from catalog")
+    imgs_from_cat = ECO_dict.get_group(key)['new_filename'].values
+
+    #THIS WON'T WORK AS THEY HAVE TO BE SEPARATED BY FILTER. KEEP LINE 49 and
+    #next 3 lines and have a loop afterwards that finds common filenames in 
+    #both arrays and appends to new array that will be used as the imgs array
+    #that update_header takes. If no match then continue to next loop iteration
+    print("Getting images from text file")
+    goodimagesfile = obj+'_goodimages.txt'
+    goodimages = pd.read_csv(goodimagesfile,header=None,names=['filenames'])
+    imgs_from_txt = goodimages.values
+    
+    print("Common images are")
+    imgs = []
+    for img in imgs_from_cat:
+        img = img + '.fits'
+        if img in imgs_from_txt:
+            print(img)
+            imgs.append(img)
+        
     #Using the update_header function to output the name of the text file
     #that contains the names of the new versions of the fits images being
     #input into the function
