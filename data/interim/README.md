@@ -13,6 +13,12 @@
 | percent_blank_combinedcoadd   | After adding all coadds per filter and taking into account all pixel values less than OR exactly 0 and counting them as 'blank' |
 | percent_blank_combinedcoaddv2 | After adding all coadds per filter and taking into account all pixel values that are ONLY exactly 0 and counting them as 'blank' |
 | percent_blank                 | Calculating per object per filter and taking into account all pixel values less than OR exactly 0 and counting them as 'blank' |
+| percent_blankv2.txt           | Calculating per object per filter and taking into account all pixel values that are ONLY exactly 0 and counting them as 'blank' |
+| Error_objinimg.txt            | Errors running ObjinImg.py               |
+| Obj_in_Img_results.txt        | Writing results for each object: number of good images, total number of images |
+| Expfil2_results_bad.txt       | Writing results of running Obj_in_Img.py of all the bad objects for which there aren't enough filters |
+| Expfil2_results_good.txt      | Writing results of running Obj_in_Img.py of all the good objects: number of good images,total number of images,number of filters |
+| ECOphot_final.txt             | ECO photometry catalog                   |
 
 
 
