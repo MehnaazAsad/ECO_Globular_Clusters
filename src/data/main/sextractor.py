@@ -122,12 +122,13 @@ for index,obj in enumerate(good_Obj_subset):
     y_err.append(magerr)
     hdu_f814w_coadd.close()
 
+os.chdir('..')
 print('Plotting')
 x = np.linspace(0,len(good_Obj_subset)+1,len(good_Obj_subset))
 my_xticks = good_Obj_subset
 fig1 = plt.figure(figsize=(10,8))
 plt.xticks(x, my_xticks,rotation=90)
-plt.errorbar(x,sdssr_calc, c='r',label='calculated rmag',yerr=y_err,ls='none')
+plt.scatter(x,sdssr_calc, c='r',label='calculated rmag')
 plt.scatter(x,sdssr_cat, c='g',label='catalog rmag')
 plt.xlabel('ECOID')
 plt.ylabel('rmag')
