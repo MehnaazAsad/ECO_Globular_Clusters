@@ -22,7 +22,7 @@ foo = imp.load_source('ECO_funcs', '../mods_swarp/ECO_funcs.py')
 #Formatted ECO catalog with filters and new_filename column and list of 
 #good ECO objects
 ECOnew  = '../../../data/interim/ECO_formatted.txt'
-goodObj = '../../../data/interim/goodObj.txt'
+goodObj = '../../../data/interim/goodObjv2.txt'
 
 #Using the make_dict function to return a dictionary whose keys are ECOID and
 #filter name and whose values are filenames, return the list of sorted keys,
