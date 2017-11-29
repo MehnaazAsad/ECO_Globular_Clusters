@@ -18,10 +18,10 @@ from astropy import wcs
 goodObj = '../../../data/interim/goodObjv2.txt'
 percent_blank = '../../../data/interim/percent_blankv2.txt'
 
-#Read goodObj.txt
+#Read goodObjv2.txt
 filename1 = pd.read_csv(goodObj,header=None)
 filename1.columns = ['ECO_ID']
-#An array of the ECOIDs obtained from goodObj.txt
+#An array of the ECOIDs obtained from goodObjv2.txt
 objs_arr = filename1.ECO_ID.values
 
 #Read percent_blank.txt
