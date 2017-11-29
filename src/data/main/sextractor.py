@@ -15,6 +15,8 @@ import pandas as pd
 import numpy as np
 import os
 import subprocess
+from astropy import units as u
+from astropy.coordinates import SkyCoord
 
 eco_repo_path = '/fs1/masad/Research/Repositories/ECO_Globular_Clusters/'
 
@@ -95,6 +97,13 @@ for index,obj in enumerate(good_Obj_subset):
     print('Getting petro mag from test.cat')
 #    print(f814w_cat.x_image==xx)
 #    print(f814w_cat.y_image==yy)
+
+    cat_sextractor = SkyCoord(obj+'_acs_wfc_f814w.cat'['x_world']*u.deg, \
+                              obj+'_acs_wfc_f814w.cat'['y_world']*u.deg)
+    cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
+    idx_sdss, d2d_sdss, d3d_sdss = cat_sextractor.match_to_catalog_sky(cat_eco)
+    print('Index of matching world coordinates {0}'.format(idx_sdss))
+    
     f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
                                        f814w_cat.xmax_image))&\
                                       ((f814w_cat.ymin_image < [yy])&([yy] < \
@@ -106,6 +115,7 @@ for index,obj in enumerate(good_Obj_subset):
                                       ((f814w_cat.ymin_image < [yy])&([yy] < \
                                        f814w_cat.ymax_image))]\
                                       .values[0]
+
     f814mag = pd.to_numeric(f814mag)
     print(f814mag)
     print(magerr)
