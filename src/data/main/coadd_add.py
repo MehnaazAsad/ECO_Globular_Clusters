@@ -15,7 +15,7 @@ import warnings
 from astropy.utils.exceptions import AstropyUserWarning
 from astropy import wcs
 
-goodObj = '../../../data/interim/goodObj.txt'
+goodObj = '../../../data/interim/goodObjv2.txt'
 percent_blank = '../../../data/interim/percent_blankv2.txt'
 
 #Read goodObj.txt
@@ -23,7 +23,6 @@ filename1 = pd.read_csv(goodObj,header=None)
 filename1.columns = ['ECO_ID']
 #An array of the ECOIDs obtained from goodObj.txt
 objs_arr = filename1.ECO_ID.values
-objs_arr = objs_arr[:1] #REMOVE AFTER TESTING ECO00026
 
 #Read percent_blank.txt
 filename2 = pd.read_csv(percent_blank, header=None,sep=',')
