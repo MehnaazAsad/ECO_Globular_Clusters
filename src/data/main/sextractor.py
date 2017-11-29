@@ -18,7 +18,7 @@ import subprocess
 
 eco_repo_path = '/fs1/masad/Research/Repositories/ECO_Globular_Clusters/'
 
-goodObj = '../../../data/interim/goodObj.txt'
+goodObj = '../../../data/interim/goodObjv2.txt'
 good_Obj = pd.read_csv(goodObj,header=None)
 good_Obj.columns = ['ECOID']
 
@@ -31,15 +31,13 @@ ECO_phot_cat  = pd.read_csv(ECOphotcat, delim_whitespace=True,header=None,\
                                               'gmag','rmag','imag','zmag',\
                                               'Jmag','Hmag','Kmag'])
 
-#good_Obj_new = good_Obj.ECOID[:4].append(good_Obj.ECOID[5:11].append(good_Obj\
-#                             .ECOID[104:105]))
-
-good_Obj_new = ['ECO00026'] #REMOVE THIS
+good_Obj_subset = good_Obj[:9].append(good_Obj[10:11])
 
 sdssr_calc = []
 sdssr_cat = []
-for obj in good_Obj_new:
-    print('{0}/{1}'.format(obj,len(good_Obj_new)))
+y_err = []
+for obj in good_Obj_subset:
+    print('{0}/{1}'.format(obj,len(good_Obj_subset)))
     dir_path = os.getcwd()
     if os.path.basename(dir_path) == 'main':
         os.chdir('../../../data/interim/'+obj)
@@ -52,7 +50,7 @@ for obj in good_Obj_new:
     print('Starting source extractor')
     subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
-    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1',\
+    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
     '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
     print('Finished running source extractor')
     
@@ -71,39 +69,28 @@ for obj in good_Obj_new:
     print(wcs)
     xx,yy = wcs.wcs_world2pix(ra,dec,1)
     print(xx,yy)
-    
-#remember to copy already uncommented default.param file and remove other one
-#remember to copy all default files to last obj in contents_new
-
-#glob comb_coadd and store as image1
-#glob f814 coadd and store as image2
-#use subprocess to pass parameters
-#open filter image and get necessary keywords for finding zeropoint
-#get RA and DEC of galaxy from ECO catalog
-#open filter image and get WCS info to find world2pix transformation for RA and
-#DEC of galaxy
-#open catalog that sextractor generated and get petro mag in f814 at 
-#calculated x and y pixel values
-#Apply zeropoint to magnitude
-#Use conversion to change to r band
-#Get r band mag from photometry catalog
-#Plot both points for each galaxy
-
-#need to use WCS
 
     print('Reading test.cat')
     #CHANGE NAME
     f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
-                            delim_whitespace=True,skiprows=7,\
+                            delim_whitespace=True,\
                             names=['petro_mag','petro_magerr','petro_radius',\
                                    'xmin_image','ymin_image','xmax_image',\
-                                   'ymax_image','x_image','y_image','a_image',\
-                                   'class_star'])
+                                   'ymax_image','x_image','y_image','x_world',\
+                                   'y_world','a_image','class_star'], \
+                                   comment='#')
     
-    f814w_cat['xmin_image'] = pd.to_numeric(f814w_cat['xmin_image'],errors='coerce')
-    f814w_cat['ymin_image'] = pd.to_numeric(f814w_cat['ymin_image'],errors='coerce')
-    f814w_cat['xmax_image'] = pd.to_numeric(f814w_cat['xmax_image'],errors='coerce')
-    f814w_cat['ymax_image'] = pd.to_numeric(f814w_cat['ymax_image'],errors='coerce')
+#    f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
+#                            delim_whitespace=True,skiprows=7,\
+#                            names=['petro_mag','petro_magerr','petro_radius',\
+#                                   'xmin_image','ymin_image','xmax_image',\
+#                                   'ymax_image','x_image','y_image','a_image',\
+#                                   'class_star'])
+#    
+#    f814w_cat['xmin_image'] = pd.to_numeric(f814w_cat['xmin_image'],errors='coerce')
+#    f814w_cat['ymin_image'] = pd.to_numeric(f814w_cat['ymin_image'],errors='coerce')
+#    f814w_cat['xmax_image'] = pd.to_numeric(f814w_cat['xmax_image'],errors='coerce')
+#    f814w_cat['ymax_image'] = pd.to_numeric(f814w_cat['ymax_image'],errors='coerce')
     
     print('Getting petro mag from test.cat')
 #    print(f814w_cat.x_image==xx)
@@ -112,9 +99,15 @@ for obj in good_Obj_new:
                                        f814w_cat.xmax_image))&\
                                       ((f814w_cat.ymin_image < [yy])&([yy] < \
                                        f814w_cat.ymax_image))]\
+                                      .values[0]                                 
+    magerr = f814w_cat.petro_magerr.loc[((f814w_cat.xmin_image < [xx])&([xx] <\
+                                       f814w_cat.xmax_image))&\
+                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
+                                       f814w_cat.ymax_image))]\
                                       .values[0]
     f814mag = pd.to_numeric(f814mag)
     print(f814mag)
+    print(magerr)
     
     print('Calculating rmag')
     f814mag += zpt814
@@ -125,14 +118,15 @@ for obj in good_Obj_new:
     
     sdssr_calc.append(sdss_r)
     sdssr_cat.append(sdss_r_cat)
+    y_err.append(magerr)
     hdu_f814w_coadd.close()
 
 print('Plotting')
-x = np.linspace(0,len(good_Obj_new)+1,len(good_Obj_new))
-my_xticks = good_Obj_new
+x = np.linspace(0,len(good_Obj_subset)+1,len(good_Obj_subset))
+my_xticks = good_Obj_subset
 fig1 = plt.figure(figsize=(10,8))
 plt.xticks(x, my_xticks,rotation=90)
-plt.scatter(x,sdssr_calc, c='r',label='calculated rmag')
+plt.scatter(x,sdssr_calc, c='r',label='calculated rmag',yerr=y_err)
 plt.scatter(x,sdssr_cat, c='g',label='catalog rmag')
 plt.xlabel('ECOID')
 plt.ylabel('rmag')
