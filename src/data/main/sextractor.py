@@ -42,7 +42,7 @@ for obj in good_Obj_subset:
     if os.path.basename(dir_path) == 'main':
         os.chdir('../../../data/interim/'+obj)
     elif os.path.basename(dir_path) != obj:
-        os.chdir('../interim/'+obj)
+        os.chdir('../'+obj)
         
     comb_coadd = glob(obj+'_comb_coadd.fits')[0]
     f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
