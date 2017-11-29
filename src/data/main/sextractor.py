@@ -98,8 +98,8 @@ for index,obj in enumerate(good_Obj_subset):
 #    print(f814w_cat.x_image==xx)
 #    print(f814w_cat.y_image==yy)
 
-    cat_sextractor = SkyCoord(obj+'_acs_wfc_f814w.cat'['x_world']*u.deg, \
-                              obj+'_acs_wfc_f814w.cat'['y_world']*u.deg)
+    cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
+                              f814w_cat['y_world']*u.deg)
     cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
     idx_sdss, d2d_sdss, d3d_sdss = cat_sextractor.match_to_catalog_sky(cat_eco)
     print('Index of matching world coordinates {0}'.format(idx_sdss))
