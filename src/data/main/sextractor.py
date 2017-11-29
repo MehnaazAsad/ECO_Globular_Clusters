@@ -31,7 +31,7 @@ ECO_phot_cat  = pd.read_csv(ECOphotcat, delim_whitespace=True,header=None,\
                                               'gmag','rmag','imag','zmag',\
                                               'Jmag','Hmag','Kmag'])
 
-good_Obj_subset = good_Obj[:9].append(good_Obj[10:11])['ECOID'].values
+good_Obj_subset = good_Obj[:9]['ECOID'].values
 
 sdssr_calc = []
 sdssr_cat = []
@@ -99,7 +99,8 @@ for index,obj in enumerate(good_Obj_subset):
                                        f814w_cat.xmax_image))&\
                                       ((f814w_cat.ymin_image < [yy])&([yy] < \
                                        f814w_cat.ymax_image))]\
-                                      .values[0]                                 
+                                      .values[0] 
+                                      
     magerr = f814w_cat.petro_magerr.loc[((f814w_cat.xmin_image < [xx])&([xx] <\
                                        f814w_cat.xmax_image))&\
                                       ((f814w_cat.ymin_image < [yy])&([yy] < \
