@@ -149,7 +149,6 @@ def make_dict(ECOnew,goodObj):
     good_Obj.columns = ['ECO_ID']
     #An array of the ECOIDs obtained from goodObj.txt
     arr1             = good_Obj.ECO_ID.values
-    arr1 = arr1[:1] #REMOVE THIS AFTER TESTING ECO00026
     
     #Creates a new dataframe where you grab all the columns that match ECOID
     #in goodObj with ECOID in the formatted ECO catalog
