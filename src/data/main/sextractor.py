@@ -36,8 +36,8 @@ good_Obj_subset = good_Obj[:9].append(good_Obj[10:11])['ECOID'].values
 sdssr_calc = []
 sdssr_cat = []
 y_err = []
-for obj in good_Obj_subset:
-    print('{0}/{1}'.format(obj,len(good_Obj_subset)))
+for index,obj in enumerate(good_Obj_subset):
+    print('{0}/{1} {2}'.format(index+1,len(good_Obj_subset),obj))
     dir_path = os.getcwd()
     if os.path.basename(dir_path) == 'main':
         os.chdir('../../../data/interim/'+obj)
