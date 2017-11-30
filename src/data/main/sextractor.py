@@ -98,27 +98,30 @@ for index,obj in enumerate(good_Obj_subset):
 #    print(f814w_cat.x_image==xx)
 #    print(f814w_cat.y_image==yy)
 
+
     cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
                               f814w_cat['y_world']*u.deg)
     cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
-    idx_sdss, d2d_sdss, d3d_sdss = cat_sextractor.match_to_catalog_sky(cat_eco)
-    print('Index of matching world coordinates {0}'.format(idx_sdss))
+    idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
     
-    f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
-                                       f814w_cat.xmax_image))&\
-                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
-                                       f814w_cat.ymax_image))]\
-                                      .values[0] 
-                                      
-    magerr = f814w_cat.petro_magerr.loc[((f814w_cat.xmin_image < [xx])&([xx] <\
-                                       f814w_cat.xmax_image))&\
-                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
-                                       f814w_cat.ymax_image))]\
-                                      .values[0]
+    f814mag = f814w_cat.petro_mag.values[idx_sdss]
 
-    f814mag = pd.to_numeric(f814mag)
+    
+#    f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
+#                                       f814w_cat.xmax_image))&\
+#                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
+#                                       f814w_cat.ymax_image))]\
+#                                      .values[0] 
+#                                      
+#    magerr = f814w_cat.petro_magerr.loc[((f814w_cat.xmin_image < [xx])&([xx] <\
+#                                       f814w_cat.xmax_image))&\
+#                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
+#                                       f814w_cat.ymax_image))]\
+#                                      .values[0]
+#
+#    f814mag = pd.to_numeric(f814mag)
     print(f814mag)
-    print(magerr)
+#    print(magerr)
     
     print('Calculating rmag')
     f814mag += zpt814
@@ -129,7 +132,7 @@ for index,obj in enumerate(good_Obj_subset):
     
     sdssr_calc.append(sdss_r)
     sdssr_cat.append(sdss_r_cat)
-    y_err.append(magerr)
+#    y_err.append(magerr)
     hdu_f814w_coadd.close()
 
 os.chdir('..')
