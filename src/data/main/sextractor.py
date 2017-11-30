@@ -76,35 +76,27 @@ for index,obj in enumerate(good_Obj_subset):
     #CHANGE NAME
     f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
                             delim_whitespace=True,\
-                            names=['petro_mag','petro_magerr','petro_radius',\
+                            names=['petro_flux','petro_fluxerr','petro_mag',\
+                                   'petro_magerr','petro_radius',\
                                    'xmin_image','ymin_image','xmax_image',\
                                    'ymax_image','x_image','y_image','x_world',\
                                    'y_world','a_image','class_star'], \
                                    comment='#')
     
-#    f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
-#                            delim_whitespace=True,skiprows=7,\
-#                            names=['petro_mag','petro_magerr','petro_radius',\
-#                                   'xmin_image','ymin_image','xmax_image',\
-#                                   'ymax_image','x_image','y_image','a_image',\
-#                                   'class_star'])
-#    
-#    f814w_cat['xmin_image'] = pd.to_numeric(f814w_cat['xmin_image'],errors='coerce')
-#    f814w_cat['ymin_image'] = pd.to_numeric(f814w_cat['ymin_image'],errors='coerce')
-#    f814w_cat['xmax_image'] = pd.to_numeric(f814w_cat['xmax_image'],errors='coerce')
-#    f814w_cat['ymax_image'] = pd.to_numeric(f814w_cat['ymax_image'],errors='coerce')
-    
     print('Getting petro mag from test.cat')
-#    print(f814w_cat.x_image==xx)
-#    print(f814w_cat.y_image==yy)
 
 
     cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
                               f814w_cat['y_world']*u.deg)
     cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
     idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
-    
+
     f814mag = f814w_cat.petro_mag.values[idx_sdss]
+    petroflux = f814w_cat.petro_flux.values[idx_sdss]
+    
+    with open('sextractor_magflux.txt','a') as newfile:
+        newfile.write('{0},{1}\n'.format(f814mag,petroflux))
+        newfile.close()
 
     
 #    f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
@@ -121,8 +113,7 @@ for index,obj in enumerate(good_Obj_subset):
 #
 #    f814mag = pd.to_numeric(f814mag)
     print(f814mag)
-#    print(magerr)
-    
+
     print('Calculating rmag')
     f814mag += zpt814
     sdss_r = f814mag - 1
