@@ -162,7 +162,7 @@ plt.scatter(x,sdssr_cat, c='g',label='catalog rmag')
 plt.xlabel('ECOID')
 plt.ylabel('rmag')
 plt.gca().invert_yaxis()
-plt.legend(loc='lower right')
+plt.legend(loc='lower left')
 plt.title('Comparison of calculated rmag and rmag from ECO photometric table')
 plt.savefig('calcrmag_catrmag.png')
     
