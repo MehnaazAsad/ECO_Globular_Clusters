@@ -103,10 +103,11 @@ for index,obj in enumerate(good_Obj_subset):
     
     petroflux = f814w_cat.petro_flux.values[idx_sdss]
     
+    os.chdir('..')
     with open('sextractor_magflux.txt','a') as newfile:
         newfile.write('{0},{1}\n'.format(f814mag,petroflux))
         newfile.close()
-
+    os.chdir(obj)
     
 #    f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
 #                                       f814w_cat.xmax_image))&\
@@ -154,9 +155,9 @@ my_xticks = good_Obj_subset
 fig1 = plt.figure(figsize=(10,8))
 plt.xticks(x, my_xticks,rotation=90)
 plt.scatter(x,sdssr_petro_calc, c='r',label='calculated petro rmag')
-plt.scatter(x,sdssr_iso_calc, c='r',label='calculated iso rmag')
-plt.scatter(x,sdssr_isocorr_calc, c='r',label='calculated iso corr rmag')
-plt.scatter(x,sdssr_auto_calc, c='r',label='calculated auto rmag')
+plt.scatter(x,sdssr_iso_calc, c='b',label='calculated iso rmag')
+plt.scatter(x,sdssr_isocorr_calc, c='c',label='calculated iso corr rmag')
+plt.scatter(x,sdssr_auto_calc, c='m',label='calculated auto rmag')
 plt.scatter(x,sdssr_cat, c='g',label='catalog rmag')
 plt.xlabel('ECOID')
 plt.ylabel('rmag')
