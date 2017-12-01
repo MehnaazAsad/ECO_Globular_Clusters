@@ -35,9 +35,13 @@ ECO_phot_cat  = pd.read_csv(ECOphotcat, delim_whitespace=True,header=None,\
 
 good_Obj_subset = good_Obj[:9]['ECOID'].values
 
-sdssr_calc = []
+sdssr_petro_calc = []
+sdssr_iso_calc = []
+sdssr_isocorr_calc = []
+sdssr_auto_calc = []
 sdssr_cat = []
-y_err = []
+
+#y_err = []
 for index,obj in enumerate(good_Obj_subset):
     print('{0}/{1} {2}'.format(index+1,len(good_Obj_subset),obj))
     dir_path = os.getcwd()
@@ -76,7 +80,8 @@ for index,obj in enumerate(good_Obj_subset):
     #CHANGE NAME
     f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
                             delim_whitespace=True,\
-                            names=['petro_flux','petro_fluxerr','petro_mag',\
+                            names=['iso_mag','isocorr_mag','auto_mag',\
+                                   'petro_flux','petro_fluxerr','petro_mag',\
                                    'petro_magerr','petro_radius',\
                                    'xmin_image','ymin_image','xmax_image',\
                                    'ymax_image','x_image','y_image','x_world',\
@@ -92,6 +97,10 @@ for index,obj in enumerate(good_Obj_subset):
     idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
 
     f814mag = f814w_cat.petro_mag.values[idx_sdss]
+    isomag = f814w_cat.iso_mag.values[idx_sdss]
+    isocorrmag = f814w_cat.isocorr_mag.values[idx_sdss]
+    automag = f814w_cat.auto_mag.values[idx_sdss]
+    
     petroflux = f814w_cat.petro_flux.values[idx_sdss]
     
     with open('sextractor_magflux.txt','a') as newfile:
@@ -116,12 +125,24 @@ for index,obj in enumerate(good_Obj_subset):
 
     print('Calculating rmag')
     f814mag += zpt814
-    sdss_r = f814mag - 1
+    sdss_r_petro = f814mag - 1
+    
+    isomag += zpt814
+    sdss_r_iso = isomag - 1
+    
+    isocorrmag += zpt814
+    sdss_r_isocorr = isocorrmag - 1
+    
+    automag += zpt814
+    sdss_r_auto = automag - 1
     
     print('Retrieving rmag from catalog')
     sdss_r_cat = ECO_phot_cat.rmag.loc[ECO_phot_cat.ECOID==obj].values[0]
     
-    sdssr_calc.append(sdss_r)
+    sdssr_petro_calc.append(sdss_r_petro)
+    sdssr_iso_calc.append(sdss_r_iso)
+    sdssr_isocorr_calc.append(sdss_r_isocorr)
+    sdssr_auto_calc.append(sdss_r_auto)
     sdssr_cat.append(sdss_r_cat)
 #    y_err.append(magerr)
     hdu_f814w_coadd.close()
@@ -132,7 +153,10 @@ x = np.linspace(0,len(good_Obj_subset)+1,len(good_Obj_subset))
 my_xticks = good_Obj_subset
 fig1 = plt.figure(figsize=(10,8))
 plt.xticks(x, my_xticks,rotation=90)
-plt.scatter(x,sdssr_calc, c='r',label='calculated rmag')
+plt.scatter(x,sdssr_petro_calc, c='r',label='calculated petro rmag')
+plt.scatter(x,sdssr_iso_calc, c='r',label='calculated iso rmag')
+plt.scatter(x,sdssr_isocorr_calc, c='r',label='calculated iso corr rmag')
+plt.scatter(x,sdssr_auto_calc, c='r',label='calculated auto rmag')
 plt.scatter(x,sdssr_cat, c='g',label='catalog rmag')
 plt.xlabel('ECOID')
 plt.ylabel('rmag')
