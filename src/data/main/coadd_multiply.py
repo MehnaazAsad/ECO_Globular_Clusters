@@ -15,7 +15,7 @@ import pandas as pd
 import numpy as np
 import os
 
-goodObj = '../../../data/interim/goodObj.txt'
+goodObj = '../../../data/interim/goodObjv2.txt'
 percent_blank = '../../../data/interim/percent_blankv2.txt'
 
 #Read goodObj.txt
