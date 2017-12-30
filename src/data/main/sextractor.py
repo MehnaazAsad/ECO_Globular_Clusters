@@ -125,16 +125,16 @@ for index,obj in enumerate(good_Obj_subset):
     print(f814mag)
 
     print('Calculating rmag')
-    f814mag -= zpt814
+    f814mag += zpt814
     sdss_r_petro = f814mag - 1
     
-    isomag -= zpt814
+    isomag += zpt814
     sdss_r_iso = isomag - 1
     
-    isocorrmag -= zpt814
+    isocorrmag += zpt814
     sdss_r_isocorr = isocorrmag - 1
     
-    automag -= zpt814
+    automag += zpt814
     sdss_r_auto = automag - 1
     
     print('Retrieving rmag from catalog')
