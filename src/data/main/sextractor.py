@@ -35,7 +35,8 @@ ECO_phot_cat  = pd.read_csv(ECOphotcat, delim_whitespace=True,header=None,\
 
 good_Obj_subset = good_Obj[:4]['ECOID'].append(good_Obj[5:9]['ECOID']).values
 
-sdssr_petro_calc = []
+sdssr_stpetro_calc = []
+sdssr_abpetro_calc = []
 sdssr_iso_calc = []
 sdssr_isocorr_calc = []
 sdssr_auto_calc = []
@@ -64,8 +65,11 @@ for index,obj in enumerate(good_Obj_subset):
     prihdr = hdu_f814w_coadd[0].header
     photflam814 = prihdr['PHOTFLAM']
     photzpt814 = prihdr['PHOTZPT']
+    photplam814 = prihdr['PHOTPLAM']
+    
     print('Calculating zeropoint')
-    zpt814 = -2.5*np.log10(photflam814) + photzpt814
+    stzpt814 = -2.5*np.log10(photflam814) + photzpt814
+    abzpt814 = -2.5*np.log10(photflam814) - (5*np.log10(photplam814)) - 2.408
 
     ra = np.unique(ECO_new.RA.loc[ECO_new.ECOID==obj])[0]
     dec = np.unique(ECO_new.DEC.loc[ECO_new.ECOID==obj])[0]
@@ -125,22 +129,26 @@ for index,obj in enumerate(good_Obj_subset):
     print(f814mag)
 
     print('Calculating rmag')
-    f814mag += zpt814
-    sdss_r_petro = f814mag - 1
+    f814stmag = f814mag + stzpt814
+    f814abmag = f814mag + abzpt814
+    sdss_r_petro_st = f814stmag - 1
+    sdss_r_petro_ab = f814abmag - 1
     
-    isomag += zpt814
+    isomag += stzpt814
     sdss_r_iso = isomag - 1
     
-    isocorrmag += zpt814
+    isocorrmag += stzpt814
     sdss_r_isocorr = isocorrmag - 1
     
-    automag += zpt814
+    automag += stzpt814
     sdss_r_auto = automag - 1
     
     print('Retrieving rmag from catalog')
     sdss_r_cat = ECO_phot_cat.rmag.loc[ECO_phot_cat.ECOID==obj].values[0]
     
-    sdssr_petro_calc.append(sdss_r_petro)
+    sdssr_stpetro_calc.append(sdss_r_petro_st)
+    sdssr_abpetro_calc.append(sdss_r_petro_ab)
+    
     sdssr_iso_calc.append(sdss_r_iso)
     sdssr_isocorr_calc.append(sdss_r_isocorr)
     sdssr_auto_calc.append(sdss_r_auto)
@@ -154,10 +162,11 @@ x = np.linspace(0,len(good_Obj_subset)+1,len(good_Obj_subset))
 my_xticks = good_Obj_subset
 fig1 = plt.figure(figsize=(10,8))
 plt.xticks(x, my_xticks,rotation=90)
-plt.scatter(x,sdssr_petro_calc, c='r',label='calculated petro rmag')
-plt.scatter(x,sdssr_iso_calc, c='b',label='calculated iso rmag')
-plt.scatter(x,sdssr_isocorr_calc, c='c',label='calculated iso corr rmag')
-plt.scatter(x,sdssr_auto_calc, c='m',label='calculated auto rmag')
+plt.scatter(x,sdssr_stpetro_calc, c='r',label='calculated petro rmag (st)')
+plt.scatter(x,sdssr_abpetro_calc, c='b',label='calculated petro rmag (ab)')
+#plt.scatter(x,sdssr_iso_calc, c='b',label='calculated iso rmag')
+#plt.scatter(x,sdssr_isocorr_calc, c='c',label='calculated iso corr rmag')
+#plt.scatter(x,sdssr_auto_calc, c='m',label='calculated auto rmag')
 plt.scatter(x,sdssr_cat, c='g',label='catalog rmag')
 plt.xlabel('ECOID')
 plt.ylabel('rmag')
