@@ -83,10 +83,11 @@ for index,key in enumerate(ECO_keys):
         print('Starting to swarp')    
         subprocess.call(['swarp','@'+img_list_txt,'-CENTER_TYPE','MANUAL', \
         '-CENTER',str(ra)+","+str(dec),'-NTHREADS','32', '-COPY_KEYWORDS', \
-        'PHOTFLAM,PHOTZPT,PHOTPLAM','-COMBINE_BUFSIZE','10000','-MEM_MAX', \
-        '1000','-VMEM_MAX','5000','-IMAGE_SIZE','3960','-PIXELSCALE_TYPE', \
-        'MANUAL','-PIXEL_SCALE','0.05','-GAIN_KEYWORD','CCDGAIN', \
-        '-GAIN_DEFAULT','1.0','-SUBTRACT_BACK','Y','-IMAGEOUT_NAME',\
+        'PHOTFLAM,PHOTZPT,PHOTPLAM','-FSCALASTRO_TYPE','VARIABLE',\
+        '-COMBINE_BUFSIZE','10000','-MEM_MAX','1000','-VMEM_MAX','5000',\
+        '-IMAGE_SIZE','3960','-PIXELSCALE_TYPE','MANUAL','-PIXEL_SCALE',\
+        '0.05','-GAIN_KEYWORD','CCDGAIN','-GAIN_DEFAULT','1.0',\
+        '-SUBTRACT_BACK','Y','-IMAGEOUT_NAME',\
         obj+'_'+filter_i+'_'+'coadd.fits','-WEIGHTOUT_NAME',\
         obj+'_'+filter_i+'_'+'coadd.weight.fits','-XML_NAME',\
         obj+'_'+filter_i+'_'+'swarp.xml'])
