@@ -105,7 +105,7 @@ for index,obj in enumerate(good_Obj_subset):
 
 
     cat_sextractor = SkyCoord(f814w_cat['x_world'],\
-                              f814w_cat['y_world'])
+                              f814w_cat['y_world']*u.deg)
     cat_eco = SkyCoord(ra, dec)
     idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
 
