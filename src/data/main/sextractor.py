@@ -57,19 +57,23 @@ for index,obj in enumerate(good_Obj_subset):
 #    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
 
     f814_coadd = 'hst_10397_03_acs_wfc_f814w.fits' #remove after testing
+
+    hdu_f814w_coadd = fits.open(f814_coadd)
+    test_image = hdu_f814w_coadd[1]
+    
     
     print('Starting source extractor')
 #    subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
 #    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
 #    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
 #    '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
-    subprocess.call(['sex',f814_coadd,'-ANALYSIS_THRESH','1.5',\
+    subprocess.call(['sex',test_image,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
     '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
     '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
-    print('Finished running source extractor') #remove 66-70 after testing
+    print('Finished running source extractor') #remove 66-69 after testing
     
-    hdu_f814w_coadd = fits.open(f814_coadd)  
+      
 #    prihdr = hdu_f814w_coadd[0].header
     prihdr = hdu_f814w_coadd[1].header #delete after testing
     photflam814 = prihdr['PHOTFLAM']
