@@ -42,17 +42,12 @@ for index,key in enumerate(ECO_keys):
     #After the first time all that has to be done is to move out of the  
     #interim ECO object dir and into the raw ECO object dir
     elif os.path.basename(dir_path) != obj:
-        print(dir_path)
         os.chdir('../raw/'+obj)
     #Using the ECOID,filter key to acess the values in the new_filename column
     #i.e. get a list of the images associated with this key pair
     print("Getting images from catalog")
     imgs_from_cat = ECO_dict.get_group(key)['new_filename'].values
 
-    #THIS WON'T WORK AS THEY HAVE TO BE SEPARATED BY FILTER. KEEP LINE 49 and
-    #next 3 lines and have a loop afterwards that finds common filenames in 
-    #both arrays and appends to new array that will be used as the imgs array
-    #that update_header takes. If no match then continue to next loop iteration
     print("Getting images from text file")
     goodimagesfile = obj+'_goodimages.txt'
     goodimages = pd.read_csv(goodimagesfile,header=None,names=['filenames'])
