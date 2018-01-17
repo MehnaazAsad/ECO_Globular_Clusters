@@ -33,7 +33,9 @@ ECO_phot_cat  = pd.read_csv(ECOphotcat, delim_whitespace=True,header=None,\
                                               'gmag','rmag','imag','zmag',\
                                               'Jmag','Hmag','Kmag'])
 
-good_Obj_subset = good_Obj[:4]['ECOID'].append(good_Obj[5:9]['ECOID']).values
+#good_Obj_subset = good_Obj[:4]['ECOID'].append(good_Obj[5:9]['ECOID']).values
+
+good_Obj_subset = ['ECO01206'] #remove after testing
 
 sdssr_stpetro_calc = []
 sdssr_abpetro_calc = []
@@ -47,22 +49,29 @@ for index,obj in enumerate(good_Obj_subset):
     print('{0}/{1} {2}'.format(index+1,len(good_Obj_subset),obj))
     dir_path = os.getcwd()
     if os.path.basename(dir_path) == 'main':
-        os.chdir('../../../data/interim/'+obj)
+        os.chdir('../../../data/raw/'+obj) #Change raw back to interim
     elif os.path.basename(dir_path) != obj:
         os.chdir('../'+obj)
         
-    comb_coadd = glob(obj+'_comb_coadd.fits')[0]
-    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
+#    comb_coadd = glob(obj+'_comb_coadd.fits')[0]
+#    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
+
+    f814_coadd = 'hst_10397_03_acs_wfc_f814w.fits' #remove after testing
     
     print('Starting source extractor')
-    subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
+#    subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
+#    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
+#    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
+#    '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
+    subprocess.call(['sex',f814_coadd,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
     '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
     '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
-    print('Finished running source extractor')
+    print('Finished running source extractor') #remove 66-70 after testing
     
     hdu_f814w_coadd = fits.open(f814_coadd)  
-    prihdr = hdu_f814w_coadd[0].header
+#    prihdr = hdu_f814w_coadd[0].header
+    prihdr = hdu_f814w_coadd[1].header #delete after testing
     photflam814 = prihdr['PHOTFLAM']
     photzpt814 = prihdr['PHOTZPT']
     photplam814 = prihdr['PHOTPLAM']
@@ -108,8 +117,8 @@ for index,obj in enumerate(good_Obj_subset):
     petroflux = f814w_cat.petro_flux.values[idx_sdss]
     
     os.chdir('..')
-    with open('sextractor_magflux.txt','a') as newfile:
-        newfile.write('{0},{1}\n'.format(f814mag,petroflux))
+    with open('sextractor_magflux_ECO01206.txt','a') as newfile: #change name
+        newfile.write('{0},{1},{2}\n'.format(f814mag,petroflux,f814_coadd)) #remove name of image
         newfile.close()
     os.chdir(obj)
     
@@ -173,7 +182,7 @@ plt.ylabel('rmag')
 plt.gca().invert_yaxis()
 plt.legend(loc='lower left')
 plt.title('Comparison of calculated rmag and rmag from ECO photometric table')
-plt.savefig('calcrmag_catrmag.png')
+plt.savefig('calcrmag_catrmag_ECO01206.png') #change after testing
     
     
     
