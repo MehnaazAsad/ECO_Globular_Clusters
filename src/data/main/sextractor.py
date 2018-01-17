@@ -59,7 +59,10 @@ for index,obj in enumerate(good_Obj_subset):
     f814_coadd = 'hst_10397_03_acs_wfc_f814w.fits' #remove after testing
 
     hdu_f814w_coadd = fits.open(f814_coadd)
-    test_image = hdu_f814w_coadd[1]
+    
+    data = hdu_f814w_coadd[1].data
+    hdr = hdu_f814w_coadd[1].header
+    fits.writeto('test_'+f814_coadd, data, hdr)
     
     
     print('Starting source extractor')
@@ -67,7 +70,7 @@ for index,obj in enumerate(good_Obj_subset):
 #    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
 #    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
 #    '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
-    subprocess.call(['sex',test_image,'-ANALYSIS_THRESH','1.5',\
+    subprocess.call(['sex','test_'+f814_coadd,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
     '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
     '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
