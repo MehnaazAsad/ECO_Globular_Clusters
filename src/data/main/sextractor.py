@@ -49,36 +49,36 @@ for index,obj in enumerate(good_Obj_subset):
     print('{0}/{1} {2}'.format(index+1,len(good_Obj_subset),obj))
     dir_path = os.getcwd()
     if os.path.basename(dir_path) == 'main':
-        os.chdir('../../../data/raw/'+obj) #Change raw back to interim
+        os.chdir('../../../data/interim/'+obj) #Change raw back to interim
     elif os.path.basename(dir_path) != obj:
         os.chdir('../'+obj)
         
-#    comb_coadd = glob(obj+'_comb_coadd.fits')[0]
-#    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
+    comb_coadd = glob(obj+'_comb_coadd.fits')[0]
+    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
 
-    f814_coadd = 'hst_10397_03_acs_wfc_f814w.fits' #remove after testing
+#    f814_coadd = 'hst_10397_03_acs_wfc_f814w.fits' #remove after testing
 
     hdu_f814w_coadd = fits.open(f814_coadd)
     
-    data = hdu_f814w_coadd[1].data
-    hdr = hdu_f814w_coadd[1].header
-    fits.writeto('test_'+f814_coadd, data, hdr)
+#    data = hdu_f814w_coadd[1].data #remove 63-65 after testing
+#    hdr = hdu_f814w_coadd[1].header
+#    fits.writeto('test_'+f814_coadd, data, hdr)
     
     
     print('Starting source extractor')
-#    subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
-#    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
-#    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
-#    '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
-    subprocess.call(['sex','test_'+f814_coadd,'-ANALYSIS_THRESH','1.5',\
+    subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
     '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
     '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
-    print('Finished running source extractor') #remove 66-69 after testing
+#    subprocess.call(['sex','test_'+f814_coadd,'-ANALYSIS_THRESH','1.5',\
+#    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
+#    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
+#    '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
+    print('Finished running source extractor') #remove 73-76 after testing
     
       
-#    prihdr = hdu_f814w_coadd[0].header
-    prihdr = hdu_f814w_coadd[1].header #delete after testing
+    prihdr = hdu_f814w_coadd[0].header
+#    prihdr = hdu_f814w_coadd[1].header #delete after testing
     photflam814 = prihdr['PHOTFLAM']
     photzpt814 = prihdr['PHOTZPT']
     photplam814 = prihdr['PHOTPLAM']
@@ -111,37 +111,40 @@ for index,obj in enumerate(good_Obj_subset):
     print('Getting petro mag from test.cat')
 
 
-    cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
-                              f814w_cat['y_world']*u.deg)
-    cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
-    idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
-
-    f814mag = f814w_cat.petro_mag.values[idx_sdss]
-    isomag = f814w_cat.iso_mag.values[idx_sdss]
-    isocorrmag = f814w_cat.isocorr_mag.values[idx_sdss]
-    automag = f814w_cat.auto_mag.values[idx_sdss]
+#    cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
+#                              f814w_cat['y_world']*u.deg)
+#    cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
+#    idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
+#
+#    f814mag = f814w_cat.petro_mag.values[idx_sdss]
+#    isomag = f814w_cat.iso_mag.values[idx_sdss]
+#    isocorrmag = f814w_cat.isocorr_mag.values[idx_sdss]
+#    automag = f814w_cat.auto_mag.values[idx_sdss]
+#    
+#    petroflux = f814w_cat.petro_flux.values[idx_sdss]
     
-    petroflux = f814w_cat.petro_flux.values[idx_sdss]
+
+    
+    f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
+                                       f814w_cat.xmax_image))&\
+                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
+                                       f814w_cat.ymax_image))]\
+                                      .values[0] 
+                                      
+    magerr = f814w_cat.petro_magerr.loc[((f814w_cat.xmin_image < [xx])&([xx] <\
+                                       f814w_cat.xmax_image))&\
+                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
+                                       f814w_cat.ymax_image))]\
+                                      .values[0]
+
+    f814mag = pd.to_numeric(f814mag)
     
     os.chdir('..')
     with open('sextractor_magflux_ECO01206.txt','a') as newfile: #change name
-        newfile.write('{0},{1},{2}\n'.format(f814mag,petroflux,f814_coadd)) #remove name of image
+        newfile.write('{0},{1},{2}\n'.format(f814mag,f814_coadd)) #remove name of image, add back petroflux
         newfile.close()
     os.chdir(obj)
     
-#    f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
-#                                       f814w_cat.xmax_image))&\
-#                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
-#                                       f814w_cat.ymax_image))]\
-#                                      .values[0] 
-#                                      
-#    magerr = f814w_cat.petro_magerr.loc[((f814w_cat.xmin_image < [xx])&([xx] <\
-#                                       f814w_cat.xmax_image))&\
-#                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
-#                                       f814w_cat.ymax_image))]\
-#                                      .values[0]
-#
-#    f814mag = pd.to_numeric(f814mag)
     print(f814mag)
 
     print('Calculating rmag')
@@ -150,14 +153,14 @@ for index,obj in enumerate(good_Obj_subset):
     sdss_r_petro_st = f814stmag - 1
     sdss_r_petro_ab = f814abmag - 1
     
-    isomag += stzpt814
-    sdss_r_iso = isomag - 1
-    
-    isocorrmag += stzpt814
-    sdss_r_isocorr = isocorrmag - 1
-    
-    automag += stzpt814
-    sdss_r_auto = automag - 1
+#    isomag += stzpt814
+#    sdss_r_iso = isomag - 1
+#    
+#    isocorrmag += stzpt814
+#    sdss_r_isocorr = isocorrmag - 1
+#    
+#    automag += stzpt814
+#    sdss_r_auto = automag - 1
     
     print('Retrieving rmag from catalog')
     sdss_r_cat = ECO_phot_cat.rmag.loc[ECO_phot_cat.ECOID==obj].values[0]
@@ -165,9 +168,9 @@ for index,obj in enumerate(good_Obj_subset):
     sdssr_stpetro_calc.append(sdss_r_petro_st)
     sdssr_abpetro_calc.append(sdss_r_petro_ab)
     
-    sdssr_iso_calc.append(sdss_r_iso)
-    sdssr_isocorr_calc.append(sdss_r_isocorr)
-    sdssr_auto_calc.append(sdss_r_auto)
+#    sdssr_iso_calc.append(sdss_r_iso)
+#    sdssr_isocorr_calc.append(sdss_r_isocorr)
+#    sdssr_auto_calc.append(sdss_r_auto)
     sdssr_cat.append(sdss_r_cat)
 #    y_err.append(magerr)
     hdu_f814w_coadd.close()
