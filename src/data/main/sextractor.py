@@ -66,9 +66,9 @@ for index,obj in enumerate(good_Obj_subset):
     
     
     print('Starting source extractor')
-    subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','0.9',\
-    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.03', '-DETECT_THRESH','0.9',\
-    '-DETECT_MINAREA','5','-SEEING_FWHM','0.12','-PIXEL_SCALE','0.0',\
+    subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
+    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
+    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
     '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
 #    subprocess.call(['sex','test_'+f814_coadd,'-ANALYSIS_THRESH','1.5',\
 #    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
