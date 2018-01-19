@@ -141,7 +141,7 @@ for index,obj in enumerate(good_Obj_subset):
     
     os.chdir('..')
     with open('sextractor_magflux_ECO01206.txt','a') as newfile: #change name
-        newfile.write('{0},{1},{2}\n'.format(f814mag,f814_coadd)) #remove name of image, add back petroflux
+        newfile.write('{0},{1}\n'.format(f814mag,f814_coadd)) #remove name of image, add back petroflux
         newfile.close()
     os.chdir(obj)
     
