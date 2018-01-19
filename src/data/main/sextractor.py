@@ -151,7 +151,7 @@ for index,obj in enumerate(good_Obj_subset):
     f814stmag = f814mag + stzpt814
     f814abmag = f814mag + abzpt814
     sdss_r_petro_st = f814stmag - 1
-    sdss_r_petro_ab = f814abmag - 1
+    sdss_r_petro_ab = f814abmag
     
 #    isomag += stzpt814
 #    sdss_r_iso = isomag - 1
