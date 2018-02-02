@@ -56,7 +56,7 @@ for index,obj in enumerate(good_Obj_subset):
 #    comb_coadd = glob(obj+'_comb_coadd.fits')[0]
 #    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
 
-    f814_coadd = 'hlsp_coma_hst_acs-wfc_v24_f814w_v1_ivm-drz-cl' #remove after testing
+    f814_coadd = 'hlsp_coma_hst_acs-wfc_v24_f814w_v1_ivm-drz-cl.fits' #remove after testing
 
     hdu_f814w_coadd = fits.open(f814_coadd)
     
