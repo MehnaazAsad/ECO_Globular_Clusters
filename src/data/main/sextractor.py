@@ -48,7 +48,7 @@ sdssi_stpetro_calc = []
 #sdssr_auto_calc = []
 sdssr_cat = []
 sdssi_cat = []
-d2d_arr = []
+#d2d_arr = []
 
 #y_err = []
 for index,obj in enumerate(good_Obj.ECOID):
@@ -146,7 +146,13 @@ for index,obj in enumerate(good_Obj.ECOID):
         hdu_f814w_coadd.close()
         continue
     
-    d2d_arr.append(d2d_sdss)
+    print('Writing separation to file')
+    os.chdir('..')
+    with open('catmatch_separation.txt','a') as newfile:
+        newfile.write(d2d_sdss)
+        newfile.close()
+    os.chdir(obj)
+        
             
 #    isomag = f814w_cat.iso_mag.values[idx_sdss]
 #    isocorrmag = f814w_cat.isocorr_mag.values[idx_sdss]
@@ -264,7 +270,7 @@ plt.legend(loc='best')
 plt.title(r'Comparison of calculated and catalogued sdss i magnitudes',fontsize=16)
 plt.savefig('calcimag_catimag_coma.png')
   
-fig3 = plt.figure(figsize=(10,8))
-plt.hist(d2d_arr, histtype='step')
-plt.xlabel(r'separation (degrees)')
-plt.savefig('catmatch_separation.png')  
+#fig3 = plt.figure(figsize=(10,8))
+#plt.hist(d2d_arr, histtype='step')
+#plt.xlabel(r'separation (degrees)')
+#plt.savefig('catmatch_separation.png')  
