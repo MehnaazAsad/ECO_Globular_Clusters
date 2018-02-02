@@ -147,6 +147,7 @@ for index,obj in enumerate(good_Obj.ECOID):
         continue
     
     print('Writing separation to file')
+    print(d2d_sdss)
     os.chdir('..')
     with open('catmatch_separation.txt','a') as newfile:
         newfile.write(d2d_sdss+'\n')
