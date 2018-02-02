@@ -17,10 +17,15 @@ import os
 import subprocess
 from astropy import units as u
 from astropy.coordinates import SkyCoord
+from matplotlib import colors as mcolors
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+rc('text', usetex=True,fontsize=16)
+colors = dict(mcolors.BASE_COLORS, **mcolors.CSS4_COLORS)
 
 eco_repo_path = '/fs1/masad/Research/Repositories/ECO_Globular_Clusters/'
 
-goodObj = '../../../data/interim/goodObjv2.txt'
+goodObj = '../../../data/interim/comacandidates.txt'
 good_Obj = pd.read_csv(goodObj,header=None)
 good_Obj.columns = ['ECOID']
 
@@ -35,50 +40,48 @@ ECO_phot_cat  = pd.read_csv(ECOphotcat, delim_whitespace=True,header=None,\
 
 #good_Obj_subset = good_Obj[:4]['ECOID'].append(good_Obj[5:9]['ECOID']).values
 
-good_Obj_subset = ['ECO00026'] #remove after testing
-
 sdssr_stpetro_calc = []
 sdssr_abpetro_calc = []
-sdssr_iso_calc = []
-sdssr_isocorr_calc = []
-sdssr_auto_calc = []
+sdssi_stpetro_calc = []
+#sdssr_iso_calc = []
+#sdssr_isocorr_calc = []
+#sdssr_auto_calc = []
 sdssr_cat = []
+sdssi_cat = []
 
 #y_err = []
-for index,obj in enumerate(good_Obj_subset):
-    print('{0}/{1} {2}'.format(index+1,len(good_Obj_subset),obj))
+for index,obj in enumerate(good_Obj.ECOID):
+    print('{0}/{1} {2}'.format(index+1,len(good_Obj.ECOID),obj))
     dir_path = os.getcwd()
     if os.path.basename(dir_path) == 'main':
-        os.chdir('../../../data/raw/'+obj) #Change raw back to interim
+        os.chdir('../../../data/interim/'+obj)
     elif os.path.basename(dir_path) != obj:
         os.chdir('../'+obj)
         
-#    comb_coadd = glob(obj+'_comb_coadd.fits')[0]
-#    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
-
-    f814_coadd = 'hlsp_coma_hst_acs-wfc_v24_f814w_v1_ivm-drz-cl.fits' #remove after testing
+    comb_coadd = glob(obj+'_comb_coadd.fits')[0]
+    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
 
     hdu_f814w_coadd = fits.open(f814_coadd)
     
-    data = hdu_f814w_coadd[1].data #remove 63-65 after testing
-    hdr = hdu_f814w_coadd[1].header
-    fits.writeto('test_'+f814_coadd, data, hdr,output_verify='ignore')
+#    data = hdu_f814w_coadd[1].data #remove 63-65 after testing
+#    hdr = hdu_f814w_coadd[1].header
+#    fits.writeto('test_'+f814_coadd, data, hdr,output_verify='ignore')
     
     
     print('Starting source extractor')
-#    subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
-#    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
-#    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
-#    '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
-    subprocess.call(['sex','test_'+f814_coadd,'-ANALYSIS_THRESH','1.5',\
+    subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
     '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
     '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
-    print('Finished running source extractor') #remove 73-76 after testing
+#    subprocess.call(['sex','test_'+f814_coadd,'-ANALYSIS_THRESH','1.5',\
+#    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
+#    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
+#    '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
+#    print('Finished running source extractor') #remove 73-76 after testing
     
       
-#    prihdr = hdu_f814w_coadd[0].header
-    prihdr = hdu_f814w_coadd[1].header #delete after testing
+    prihdr = hdu_f814w_coadd[0].header
+#    prihdr = hdu_f814w_coadd[1].header #delete after testing
     photflam814 = prihdr['PHOTFLAM']
     photzpt814 = prihdr['PHOTZPT']
     photplam814 = prihdr['PHOTPLAM']
@@ -139,19 +142,20 @@ for index,obj in enumerate(good_Obj_subset):
 
     f814mag = pd.to_numeric(f814mag)
     
-    os.chdir('..')
-    with open('sextractor_magflux_ECO00026.txt','a') as newfile: #change name
-        newfile.write('{0},{1}\n'.format(f814mag,f814_coadd)) #remove name of image, add back petroflux
-        newfile.close()
-    os.chdir(obj)
+#    os.chdir('..')
+#    with open('sextractor_magflux_ECO00026.txt','a') as newfile: #change name
+#        newfile.write('{0},{1}\n'.format(f814mag,f814_coadd)) #remove name of image, add back petroflux
+#        newfile.close()
+#    os.chdir(obj)
     
     print(f814mag)
 
     print('Calculating rmag')
     f814stmag = f814mag + stzpt814
     f814abmag = f814mag + abzpt814
-    sdss_r_petro_st = f814stmag - 0.489
+    sdss_r_petro_st = f814stmag - 0.489 #Using average r-i for ECO of 0.289
     sdss_r_petro_ab = f814abmag
+    sdss_i_petro_st = f814stmag - 0.748 #Using average i-z for ECO of 0.226
     
 #    isomag += stzpt814
 #    sdss_r_iso = isomag - 1
@@ -164,35 +168,39 @@ for index,obj in enumerate(good_Obj_subset):
     
     print('Retrieving rmag from catalog')
     sdss_r_cat = ECO_phot_cat.rmag.loc[ECO_phot_cat.ECOID==obj].values[0]
+    sdss_i_cat = ECO_phot_cat.imag.loc[ECO_phot_cat.ECOID==obj].values[0]
     
     sdssr_stpetro_calc.append(sdss_r_petro_st)
     sdssr_abpetro_calc.append(sdss_r_petro_ab)
+    sdssi_stpetro_calc.append(sdss_i_petro_st)
     
 #    sdssr_iso_calc.append(sdss_r_iso)
 #    sdssr_isocorr_calc.append(sdss_r_isocorr)
 #    sdssr_auto_calc.append(sdss_r_auto)
     sdssr_cat.append(sdss_r_cat)
+    sdssi_cat.append(sdss_i_cat)
 #    y_err.append(magerr)
     hdu_f814w_coadd.close()
 
 os.chdir('..')
 print('Plotting')
-x = np.linspace(0,len(good_Obj_subset)+1,len(good_Obj_subset))
-my_xticks = good_Obj_subset
+#x = np.linspace(0,len(good_Obj_subset)+1,len(good_Obj_subset))
+#my_xticks = good_Obj_subset
 fig1 = plt.figure(figsize=(10,8))
-plt.xticks(x, my_xticks,rotation=90)
-plt.scatter(x,sdssr_stpetro_calc,s=50, c='r',label='calculated petro rmag (st)')
-plt.scatter(x,sdssr_abpetro_calc,s=50, c='b',label='calculated petro rmag (ab)')
+#plt.xticks(x, my_xticks,rotation=90)
+plt.scatter(sdssr_stpetro_calc,sdssr_cat,s=50,c='k',label='r mag comparison')
+plt.scatter(sdssi_stpetro_calc,sdssi_cat,s=50,c='lightgrey',label='i mag comparison')
+#plt.scatter(x,sdssr_abpetro_calc,s=50, c='b',label='calculated petro rmag (ab)')
 #plt.scatter(x,sdssr_iso_calc, c='b',label='calculated iso rmag')
 #plt.scatter(x,sdssr_isocorr_calc, c='c',label='calculated iso corr rmag')
 #plt.scatter(x,sdssr_auto_calc, c='m',label='calculated auto rmag')
-plt.scatter(x,sdssr_cat,s=50, c='g',label='catalog rmag')
-plt.xlabel('ECOID')
-plt.ylabel('rmag')
+#plt.scatter(x,sdssr_cat,s=50, c='g',label='catalog rmag')
+plt.xlabel(r'$sdss mag (SE)$')
+plt.ylabel(r'$sdss mag (ECO catalog)')
 plt.gca().invert_yaxis()
-plt.legend(loc='lower left')
-plt.title('Comparison of calculated rmag and rmag from ECO photometric table')
-plt.savefig('calcrmag_catrmag_ECO00026.png') #change after testing
+plt.legend(loc='best')
+plt.title('Comparison of calculated and catalogued sdss r and i magnitudes ')
+plt.savefig('calcrmag_catrmag_coma.png')
     
     
     
