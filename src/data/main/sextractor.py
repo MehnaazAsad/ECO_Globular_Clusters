@@ -228,10 +228,10 @@ plt.scatter(sdssi_stpetro_calc,sdssi_cat,s=50,c='lightgrey',label='i mag compari
 #plt.scatter(x,sdssr_auto_calc, c='m',label='calculated auto rmag')
 #plt.scatter(x,sdssr_cat,s=50, c='g',label='catalog rmag')
 plt.xlabel(r'$sdss mag (SE)$')
-plt.ylabel(r'$sdss mag (ECO catalog)')
+plt.ylabel(r'$sdss mag (ECO catalog)$')
 plt.gca().invert_yaxis()
 plt.legend(loc='best')
-plt.title('Comparison of calculated and catalogued sdss r and i magnitudes ')
+plt.title(r'Comparison of calculated and catalogued sdss r and i magnitudes',fontsize=16)
 plt.savefig('calcrmag_catrmag_coma.png')
     
     
