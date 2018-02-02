@@ -214,8 +214,8 @@ for index,obj in enumerate(good_Obj.ECOID):
 #    y_err.append(magerr)
     hdu_f814w_coadd.close()
 
-copy_sdssr = sdssr_stpetro_calc
-copy_sdssi = sdssi_stpetro_calc
+copy_sdssr = sdssr_cat
+copy_sdssi = sdssi_cat
 
 os.chdir('..')
 print('Plotting')
