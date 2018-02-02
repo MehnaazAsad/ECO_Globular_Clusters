@@ -62,7 +62,7 @@ for index,obj in enumerate(good_Obj_subset):
     
     data = hdu_f814w_coadd[1].data #remove 63-65 after testing
     hdr = hdu_f814w_coadd[1].header
-    fits.writeto('test_'+f814_coadd, data, hdr)
+    fits.writeto('test_'+f814_coadd, data, hdr,output_verify='ignore')
     
     
     print('Starting source extractor')
