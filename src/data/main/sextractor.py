@@ -48,6 +48,7 @@ sdssi_stpetro_calc = []
 #sdssr_auto_calc = []
 sdssr_cat = []
 sdssi_cat = []
+d2d_arr = []
 
 #y_err = []
 for index,obj in enumerate(good_Obj.ECOID):
@@ -134,6 +135,7 @@ for index,obj in enumerate(good_Obj.ECOID):
         
         if f814mag == 99.0:
             raise ValueError
+        
     except ValueError as valueerror:
         os.chdir('..')
         with open('magnitude_errors_catmatch.txt','a') as newfile:
@@ -143,6 +145,8 @@ for index,obj in enumerate(good_Obj.ECOID):
         os.chdir(obj)
         hdu_f814w_coadd.close()
         continue
+    
+    d2d_arr.append(d2d_sdss)
             
 #    isomag = f814w_cat.iso_mag.values[idx_sdss]
 #    isocorrmag = f814w_cat.isocorr_mag.values[idx_sdss]
@@ -260,4 +264,7 @@ plt.legend(loc='best')
 plt.title(r'Comparison of calculated and catalogued sdss i magnitudes',fontsize=16)
 plt.savefig('calcimag_catimag_coma.png')
   
-    
+fig3 = plt.figure(figsize=(10,8))
+plt.hist(d2d_arr, histtype='step')
+plt.xlabel(r'separation (degrees)')
+plt.savefig('catmatch_separation.png')  
