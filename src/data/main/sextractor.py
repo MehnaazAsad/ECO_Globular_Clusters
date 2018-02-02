@@ -142,6 +142,7 @@ for index,obj in enumerate(good_Obj.ECOID):
         print('Error in getting magnitude. Moving to next object.')
         os.chdir(obj)
         hdu_f814w_coadd.close()
+        continue
     except ValueError as valueerror:
         os.chdir('..')
         with open('magnitude_errors.txt','a') as newfile:
@@ -150,6 +151,7 @@ for index,obj in enumerate(good_Obj.ECOID):
         print('Magnitude is 99. Moving to next object.')
         os.chdir(obj) #Otherwise line 59 would throw an error
         hdu_f814w_coadd.close()
+        continue
         
         
                                       
