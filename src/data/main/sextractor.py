@@ -117,7 +117,7 @@ for index,obj in enumerate(good_Obj.ECOID):
     cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
                               f814w_cat['y_world']*u.deg)
     cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
-    idx_sdss, d2d_sdss, d3d_sdss = cat_sextractor.match_to_catalog_sky(cat_eco)
+    idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
 
     f814mag = f814w_cat.petro_mag.values[idx_sdss]
 #    isomag = f814w_cat.iso_mag.values[idx_sdss]
