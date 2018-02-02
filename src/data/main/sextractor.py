@@ -150,7 +150,7 @@ for index,obj in enumerate(good_Obj_subset):
     print('Calculating rmag')
     f814stmag = f814mag + stzpt814
     f814abmag = f814mag + abzpt814
-    sdss_r_petro_st = f814stmag - 0.9898
+    sdss_r_petro_st = f814stmag - 0.489
     sdss_r_petro_ab = f814abmag
     
 #    isomag += stzpt814
