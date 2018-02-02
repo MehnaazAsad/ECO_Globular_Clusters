@@ -124,13 +124,26 @@ for index,obj in enumerate(good_Obj.ECOID):
     
     print('Getting petro mag from test.cat')
 
-
-    cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
-                              f814w_cat['y_world']*u.deg)
-    cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
-    idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
-
-    f814mag = f814w_cat.petro_mag.values[idx_sdss]
+    try:
+        cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
+                                  f814w_cat['y_world']*u.deg)
+        cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
+        idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
+    
+        f814mag = f814w_cat.petro_mag.values[idx_sdss]
+        
+        if f814mag == 99.0:
+            raise ValueError
+    except ValueError as valueerror:
+        os.chdir('..')
+        with open('magnitude_errors_catmatch.txt','a') as newfile:
+            newfile.write('{0} has a mag of 99\n'.format(obj))
+            newfile.close()
+        print('Magnitude is 99. Moving to next object.')
+        os.chdir(obj)
+        hdu_f814w_coadd.close()
+        continue
+            
 #    isomag = f814w_cat.iso_mag.values[idx_sdss]
 #    isocorrmag = f814w_cat.isocorr_mag.values[idx_sdss]
 #    automag = f814w_cat.auto_mag.values[idx_sdss]
