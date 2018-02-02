@@ -137,7 +137,7 @@ for index,obj in enumerate(good_Obj.ECOID):
     except IndexError as indexerror:
         os.chdir('..')
         with open('magnitude_errors.txt','a') as newfile:
-            newfile.write('{0} gives {1}'.format(obj,indexerror))
+            newfile.write('{0} gives {1}\n'.format(obj,indexerror))
             newfile.close()
         print('Error in getting magnitude. Moving to next object.')
         os.chdir(obj)
@@ -146,7 +146,7 @@ for index,obj in enumerate(good_Obj.ECOID):
     except ValueError as valueerror:
         os.chdir('..')
         with open('magnitude_errors.txt','a') as newfile:
-            newfile.write('{0} has a mag of 99'.format(obj))
+            newfile.write('{0} has a mag of 99\n'.format(obj))
             newfile.close()
         print('Magnitude is 99. Moving to next object.')
         os.chdir(obj) #Otherwise line 59 would throw an error
