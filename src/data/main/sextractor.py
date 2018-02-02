@@ -126,12 +126,28 @@ for index,obj in enumerate(good_Obj.ECOID):
 #    
 #    petroflux = f814w_cat.petro_flux.values[idx_sdss]
     
-
-    f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
-                                       f814w_cat.xmax_image))&\
-                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
-                                       f814w_cat.ymax_image))]\
-                                      .values[0] 
+    try:
+        f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
+                                               f814w_cat.xmax_image))&\
+                                              ((f814w_cat.ymin_image < [yy])&([yy] < \
+                                               f814w_cat.ymax_image))]\
+                                              .values[0] 
+        if f814mag == 99.0:
+            raise ValueError
+    except IndexError as indexerror:
+        os.chdir('..')
+        with open('magnitude_errors.txt','a') as newfile:
+            newfile.write('{0} gives {1}'.format(obj,indexerror))
+            newfile.close()
+        print('Error in getting magnitude. Moving to next object.')
+    except ValueError as valueerror:
+        os.chdir('..')
+        with open('magnitude_errors.txt','a') as newfile:
+            newfile.write('{0} has a mag of 99'.format(obj))
+            newfile.close()
+        print('Magnitude is 99. Moving to next object.')
+        
+        
                                       
 #    magerr = f814w_cat.petro_magerr.loc[((f814w_cat.xmin_image < [xx])&([xx] <\
 #                                       f814w_cat.xmax_image))&\
