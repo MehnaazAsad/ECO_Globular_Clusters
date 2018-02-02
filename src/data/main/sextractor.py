@@ -101,15 +101,26 @@ for index,obj in enumerate(good_Obj.ECOID):
 
     print('Reading test.cat')
     #CHANGE NAME
-    f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
-                            delim_whitespace=True,\
-                            names=['iso_mag','isocorr_mag','auto_mag',\
-                                   'petro_flux','petro_fluxerr','petro_mag',\
-                                   'petro_magerr','petro_radius',\
-                                   'xmin_image','ymin_image','xmax_image',\
-                                   'ymax_image','x_image','y_image','x_world',\
-                                   'y_world','a_image','class_star'], \
-                                   comment='#')
+    
+    if obj in good_Obj.ECOID[:8].values:
+        f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
+                                delim_whitespace=True,\
+                                names=['iso_mag','isocorr_mag','auto_mag',\
+                                       'petro_flux','petro_fluxerr','petro_mag',\
+                                       'petro_magerr','petro_radius',\
+                                       'xmin_image','ymin_image','xmax_image',\
+                                       'ymax_image','x_image','y_image','x_world',\
+                                       'y_world','a_image','class_star'], \
+                                       comment='#')
+    else:
+        f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
+                                delim_whitespace=True,\
+                                names=['petro_mag',\
+                                       'petro_magerr','petro_radius',\
+                                       'xmin_image','ymin_image','xmax_image',\
+                                       'ymax_image','x_image','y_image','x_world',\
+                                       'y_world','a_image','class_star'], \
+                                       comment='#')        
     
     print('Getting petro mag from test.cat')
 
