@@ -114,12 +114,12 @@ for index,obj in enumerate(good_Obj.ECOID):
     print('Getting petro mag from test.cat')
 
 
-    cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
-                              f814w_cat['y_world']*u.deg)
-    cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
-    idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
-
-    f814mag = f814w_cat.petro_mag.values[idx_sdss]
+#    cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
+#                              f814w_cat['y_world']*u.deg)
+#    cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
+#    idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
+#
+#    f814mag = f814w_cat.petro_mag.values[idx_sdss]
 #    isomag = f814w_cat.iso_mag.values[idx_sdss]
 #    isocorrmag = f814w_cat.isocorr_mag.values[idx_sdss]
 #    automag = f814w_cat.auto_mag.values[idx_sdss]
@@ -127,20 +127,19 @@ for index,obj in enumerate(good_Obj.ECOID):
 #    petroflux = f814w_cat.petro_flux.values[idx_sdss]
     
 
-    
-#    f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
-#                                       f814w_cat.xmax_image))&\
-#                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
-#                                       f814w_cat.ymax_image))]\
-#                                      .values[0] 
-#                                      
+    f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
+                                       f814w_cat.xmax_image))&\
+                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
+                                       f814w_cat.ymax_image))]\
+                                      .values[0] 
+                                      
 #    magerr = f814w_cat.petro_magerr.loc[((f814w_cat.xmin_image < [xx])&([xx] <\
 #                                       f814w_cat.xmax_image))&\
 #                                      ((f814w_cat.ymin_image < [yy])&([yy] < \
 #                                       f814w_cat.ymax_image))]\
 #                                      .values[0]
-#
-#    f814mag = pd.to_numeric(f814mag)
+
+    f814mag = pd.to_numeric(f814mag)
     
 #    os.chdir('..')
 #    with open('sextractor_magflux_ECO00026.txt','a') as newfile: #change name
