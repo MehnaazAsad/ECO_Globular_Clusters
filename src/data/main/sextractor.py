@@ -150,7 +150,7 @@ for index,obj in enumerate(good_Obj.ECOID):
     print(d2d_sdss)
     os.chdir('..')
     with open('catmatch_separation.txt','a') as newfile:
-        newfile.write(d2d_sdss.arcsec[0])
+        newfile.write('Separation for {0} is: {1}'.format(obj,d2d_sdss.arcsec[0]))
         newfile.write('\n')
         newfile.close()
     os.chdir(obj)
