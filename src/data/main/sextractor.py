@@ -247,6 +247,7 @@ sdss_r_cat = np.array(sdss_r_cat)
 sdss_i_cat = np.array(sdss_i_cat)
 sdssr_stpetro_calc = np.array(sdssr_stpetro_calc)
 sdssi_stpetro_calc = np.array(sdssi_stpetro_calc)
+good_Obj_subset = np.array(good_Obj_subset)
 
 os.chdir('..')
 print('Plotting')
