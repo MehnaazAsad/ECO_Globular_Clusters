@@ -84,8 +84,8 @@ for index,obj in enumerate(good_Obj.ECOID):
     print('Finished running source extractor') #remove 73-76 after testing
     
       
-    prihdr = hdu_f814w_coadd[0].header
-#    prihdr = hdu_f814w_coadd[1].header #delete after testing
+#    prihdr = hdu_f814w_coadd[0].header
+    prihdr = hdu_f814w_coadd[1].header #delete after testing
     photflam814 = prihdr['PHOTFLAM']
     photzpt814 = prihdr['PHOTZPT']
     photplam814 = prihdr['PHOTPLAM']
