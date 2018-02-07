@@ -217,7 +217,7 @@ for index,obj in enumerate(good_Obj.ECOID):
     sdss_r_petro_ab = f814abmag
     sdss_i_petro_st = f814stmag - 0.748 #Using average i-z for ECO of 0.226
     
-    print(obj,sdss_r_petro_st)
+    
     
 #    isomag += stzpt814
 #    sdss_r_iso = isomag - 1
@@ -252,6 +252,9 @@ sdss_i_cat = np.array(sdss_i_cat)
 sdssr_stpetro_calc = np.array(sdssr_stpetro_calc)
 sdssi_stpetro_calc = np.array(sdssi_stpetro_calc)
 good_Obj_subset = np.array(good_Obj_subset)
+
+print(good_Obj_subset)
+print(sdssr_stpetro_calc)
 
 os.chdir('..')
 print('Plotting')
