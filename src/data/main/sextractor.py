@@ -147,6 +147,8 @@ for index,obj in enumerate(good_Obj.ECOID):
         hdu_f814w_coadd.close()
         continue
     
+    
+    
     print('Writing separation to file')
     print(d2d_sdss)
     os.chdir('..')
@@ -214,6 +216,8 @@ for index,obj in enumerate(good_Obj.ECOID):
     sdss_r_petro_st = f814stmag - 0.489 #Using average r-i for ECO of 0.289
     sdss_r_petro_ab = f814abmag
     sdss_i_petro_st = f814stmag - 0.748 #Using average i-z for ECO of 0.226
+    
+    print(obj,sdss_r_petro_st)
     
 #    isomag += stzpt814
 #    sdss_r_iso = isomag - 1
