@@ -64,7 +64,7 @@ for index,obj in enumerate(good_Obj.ECOID):
 #    comb_coadd = glob(obj+'_comb_coadd.fits')[0]
 #    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
 
-    f814_coadd = 'hst_10861_b4_acs_wfc_f814w.fits'
+    f814_coadd = 'hlsp_coma_hst_acs-wfc_v24_f814w_v1_ivm-drz-cl.fits'
     hdu_f814w_coadd = fits.open(f814_coadd)
     
     data = hdu_f814w_coadd[1].data #remove 63-65 after testing
