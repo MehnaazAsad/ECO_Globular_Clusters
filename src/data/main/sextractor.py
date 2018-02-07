@@ -40,8 +40,6 @@ ECO_phot_cat  = pd.read_csv(ECOphotcat, delim_whitespace=True,header=None,\
 
 #good_Obj_subset = good_Obj[:4]['ECOID'].append(good_Obj[5:9]['ECOID']).values
 
-good_Obj = good_Obj[:1]
-
 sdssr_stpetro_calc = []
 sdssr_abpetro_calc = []
 sdssi_stpetro_calc = []
@@ -57,35 +55,34 @@ for index,obj in enumerate(good_Obj.ECOID):
     print('{0}/{1} {2}'.format(index+1,len(good_Obj.ECOID),obj))
     dir_path = os.getcwd()
     if os.path.basename(dir_path) == 'main':
-        os.chdir('../../../data/raw/'+obj)
+        os.chdir('../../../data/interim/'+obj)
     elif os.path.basename(dir_path) != obj:
         os.chdir('../'+obj)
         
-#    comb_coadd = glob(obj+'_comb_coadd.fits')[0]
-#    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
+    comb_coadd = glob(obj+'_comb_coadd.fits')[0]
+    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
 
-    f814_coadd = 'hlsp_coma_hst_acs-wfc_v24_f814w_v1_ivm-drz-cl.fits'
     hdu_f814w_coadd = fits.open(f814_coadd)
     
-    data = hdu_f814w_coadd[1].data #remove 63-65 after testing
-    hdr = hdu_f814w_coadd[1].header
-    fits.writeto('test_'+f814_coadd, data, hdr,output_verify='ignore')
+#    data = hdu_f814w_coadd[1].data #remove 63-65 after testing
+#    hdr = hdu_f814w_coadd[1].header
+#    fits.writeto('test_'+f814_coadd, data, hdr,output_verify='ignore')
     
     
     print('Starting source extractor')
-#    subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
-#    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
-#    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
-#    '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
-    subprocess.call(['sex','test_'+f814_coadd,'-ANALYSIS_THRESH','1.5',\
+    subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
     '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
     '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
-    print('Finished running source extractor') #remove 73-76 after testing
+#    subprocess.call(['sex','test_'+f814_coadd,'-ANALYSIS_THRESH','1.5',\
+#    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
+#    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
+#    '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
+#    print('Finished running source extractor') #remove 73-76 after testing
     
       
-#    prihdr = hdu_f814w_coadd[0].header
-    prihdr = hdu_f814w_coadd[1].header #delete after testing
+    prihdr = hdu_f814w_coadd[0].header
+#    prihdr = hdu_f814w_coadd[1].header #delete after testing
     photflam814 = prihdr['PHOTFLAM']
     photzpt814 = prihdr['PHOTZPT']
     photplam814 = prihdr['PHOTPLAM']
@@ -106,57 +103,57 @@ for index,obj in enumerate(good_Obj.ECOID):
     print('Reading test.cat')
     #CHANGE NAME
     
-#    if obj in good_Obj.ECOID[:8].values:
-    f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
-                            delim_whitespace=True,\
-                            names=['iso_mag','isocorr_mag','auto_mag',\
-                                   'petro_flux','petro_fluxerr','petro_mag',\
-                                   'petro_magerr','petro_radius',\
-                                   'xmin_image','ymin_image','xmax_image',\
-                                   'ymax_image','x_image','y_image','x_world',\
-                                   'y_world','a_image','class_star'], \
-                                   comment='#')
-#    else:
-#        f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
-#                                delim_whitespace=True,\
-#                                names=['petro_mag',\
-#                                       'petro_magerr','petro_radius',\
-#                                       'xmin_image','ymin_image','xmax_image',\
-#                                       'ymax_image','x_image','y_image','x_world',\
-#                                       'y_world','a_image','class_star'], \
-#                                       comment='#')        
+    if obj in good_Obj.ECOID[:8].values:
+        f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
+                                delim_whitespace=True,\
+                                names=['iso_mag','isocorr_mag','auto_mag',\
+                                       'petro_flux','petro_fluxerr','petro_mag',\
+                                       'petro_magerr','petro_radius',\
+                                       'xmin_image','ymin_image','xmax_image',\
+                                       'ymax_image','x_image','y_image','x_world',\
+                                       'y_world','a_image','class_star'], \
+                                       comment='#')
+    else:
+        f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
+                                delim_whitespace=True,\
+                                names=['petro_mag',\
+                                       'petro_magerr','petro_radius',\
+                                       'xmin_image','ymin_image','xmax_image',\
+                                       'ymax_image','x_image','y_image','x_world',\
+                                       'y_world','a_image','class_star'], \
+                                       comment='#')        
     
     print('Getting petro mag from test.cat')
 
-#    try:
-#        cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
-#                                  f814w_cat['y_world']*u.deg)
-#        cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
-#        idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
-#    
-#        f814mag = f814w_cat.petro_mag.values[idx_sdss]
-#        
-#        if f814mag == 99.0:
-#            raise ValueError
-#        
-#    except ValueError as valueerror:
-#        os.chdir('..')
-#        with open('magnitude_errors_catmatch.txt','a') as newfile:
-#            newfile.write('{0} has a mag of 99\n'.format(obj))
-#            newfile.close()
-#        print('Magnitude is 99. Moving to next object.')
-#        os.chdir(obj)
-#        hdu_f814w_coadd.close()
-#        continue
-#    
-#    print('Writing separation to file')
-#    print(d2d_sdss)
-#    os.chdir('..')
-#    with open('catmatch_separation.txt','a') as newfile:
-#        newfile.write('Separation for {0} is: {1}'.format(obj,d2d_sdss.arcsec[0]))
-#        newfile.write('\n')
-#        newfile.close()
-#    os.chdir(obj)
+    try:
+        cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
+                                  f814w_cat['y_world']*u.deg)
+        cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
+        idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
+    
+        f814mag = f814w_cat.petro_mag.values[idx_sdss]
+        
+        if f814mag == 99.0:
+            raise ValueError
+        
+    except ValueError as valueerror:
+        os.chdir('..')
+        with open('magnitude_errors_catmatch.txt','a') as newfile:
+            newfile.write('{0} has a mag of 99\n'.format(obj))
+            newfile.close()
+        print('Magnitude is 99. Moving to next object.')
+        os.chdir(obj)
+        hdu_f814w_coadd.close()
+        continue
+    
+    print('Writing separation to file')
+    print(d2d_sdss)
+    os.chdir('..')
+    with open('catmatch_separation.txt','a') as newfile:
+        newfile.write('Separation for {0} is: {1}'.format(obj,d2d_sdss.arcsec[0]))
+        newfile.write('\n')
+        newfile.close()
+    os.chdir(obj)
         
             
 #    isomag = f814w_cat.iso_mag.values[idx_sdss]
@@ -165,32 +162,32 @@ for index,obj in enumerate(good_Obj.ECOID):
 #    
 #    petroflux = f814w_cat.petro_flux.values[idx_sdss]
     
-    try:
-        f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
-                                               f814w_cat.xmax_image))&\
-                                              ((f814w_cat.ymin_image < [yy])&([yy] < \
-                                               f814w_cat.ymax_image))]\
-                                              .values[0] 
-        if f814mag == 99.0:
-            raise ValueError
-    except IndexError as indexerror:
-        os.chdir('..')
-        with open('magnitude_errors.txt','a') as newfile:
-            newfile.write('{0} gives {1}\n'.format(obj,indexerror))
-            newfile.close()
-        print('Error in getting magnitude. Moving to next object.')
-        os.chdir(obj)
-        hdu_f814w_coadd.close()
-        continue
-    except ValueError as valueerror:
-        os.chdir('..')
-        with open('magnitude_errors.txt','a') as newfile:
-            newfile.write('{0} has a mag of 99\n'.format(obj))
-            newfile.close()
-        print('Magnitude is 99. Moving to next object.')
-        os.chdir(obj) #Otherwise line 59 would throw an error
-        hdu_f814w_coadd.close()
-        continue
+#    try:
+#        f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
+#                                               f814w_cat.xmax_image))&\
+#                                              ((f814w_cat.ymin_image < [yy])&([yy] < \
+#                                               f814w_cat.ymax_image))]\
+#                                              .values[0] 
+#        if f814mag == 99.0:
+#            raise ValueError
+#    except IndexError as indexerror:
+#        os.chdir('..')
+#        with open('magnitude_errors.txt','a') as newfile:
+#            newfile.write('{0} gives {1}\n'.format(obj,indexerror))
+#            newfile.close()
+#        print('Error in getting magnitude. Moving to next object.')
+#        os.chdir(obj)
+#        hdu_f814w_coadd.close()
+#        continue
+#    except ValueError as valueerror:
+#        os.chdir('..')
+#        with open('magnitude_errors.txt','a') as newfile:
+#            newfile.write('{0} has a mag of 99\n'.format(obj))
+#            newfile.close()
+#        print('Magnitude is 99. Moving to next object.')
+#        os.chdir(obj) #Otherwise line 59 would throw an error
+#        hdu_f814w_coadd.close()
+#        continue
         
         
                                       
@@ -251,8 +248,14 @@ print('Plotting')
 #my_xticks = good_Obj_subset
 fig1 = plt.figure(figsize=(10,8))
 #plt.xticks(x, my_xticks,rotation=90)
-plt.scatter(sdssr_cat,sdssr_stpetro_calc,s=50,c='lightgrey',label='r mag comparison')
-#plt.plot(sdssr_cat,copy_sdssr,'k--')
+for label,x,y in zip(good_Obj.ECOID,sdss_r_cat,sdssr_stpetro_calc):
+    if label=='ECO00026':
+        plt.scatter(x,y,s=50,c='red',label='ECO00026')
+    else:
+        plt.scatter(x,y,s=50,c='lightgrey')
+
+#plt.scatter(sdssr_cat,sdssr_stpetro_calc,s=50,c='lightgrey',label='r mag comparison')
+plt.plot(sdssr_cat,copy_sdssr,'k--')
 #plt.scatter(x,sdssr_abpetro_calc,s=50, c='b',label='calculated petro rmag (ab)')
 #plt.scatter(x,sdssr_iso_calc, c='b',label='calculated iso rmag')
 #plt.scatter(x,sdssr_isocorr_calc, c='c',label='calculated iso corr rmag')
@@ -267,7 +270,7 @@ plt.savefig('calcrmag_catrmag_coma.png')
 
 fig2 = plt.figure(figsize=(10,8))    
 plt.scatter(sdssi_cat,sdssi_stpetro_calc,s=50,c='lightgrey',label='i mag comparison')
-#plt.plot(sdssi_cat,copy_sdssi,'k--')
+plt.plot(sdssi_cat,copy_sdssi,'k--')
 plt.xlabel(r'ECO sdss mag')
 plt.ylabel(r'SE sdss mag')
 #plt.gca().invert_yaxis()
