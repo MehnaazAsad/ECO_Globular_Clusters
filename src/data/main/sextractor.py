@@ -243,6 +243,11 @@ for index,obj in enumerate(good_Obj.ECOID):
 copy_sdssr = sdssr_cat
 copy_sdssi = sdssi_cat
 
+sdss_r_cat = np.array(sdss_r_cat)
+sdss_i_cat = np.array(sdss_i_cat)
+sdssr_stpetro_calc = np.array(sdssr_stpetro_calc)
+sdssi_stpetro_calc = np.array(sdssi_stpetro_calc)
+
 os.chdir('..')
 print('Plotting')
 #x = np.linspace(0,len(good_Obj_subset)+1,len(good_Obj_subset))
