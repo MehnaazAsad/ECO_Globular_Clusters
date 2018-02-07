@@ -243,21 +243,19 @@ for index,obj in enumerate(good_Obj.ECOID):
 copy_sdssr = sdssr_cat
 copy_sdssi = sdssi_cat
 
-sdss_r_cat = np.array(sdss_r_cat)
+sdssr_cat = np.array(sdssr_cat)
 sdss_i_cat = np.array(sdss_i_cat)
 sdssr_stpetro_calc = np.array(sdssr_stpetro_calc)
 sdssi_stpetro_calc = np.array(sdssi_stpetro_calc)
 good_Obj_subset = np.array(good_Obj_subset)
-print(good_Obj_subset)
-print(sdssr_stpetro_calc)
-print(sdss_r_cat)
+
 os.chdir('..')
 print('Plotting')
 #x = np.linspace(0,len(good_Obj_subset)+1,len(good_Obj_subset))
 #my_xticks = good_Obj_subset
 fig1 = plt.figure(figsize=(10,8))
 #plt.xticks(x, my_xticks,rotation=90)
-for label,x,y in zip(good_Obj_subset,sdss_r_cat,sdssr_stpetro_calc):
+for label,x,y in zip(good_Obj_subset,sdssr_cat,sdssr_stpetro_calc):
     if label=='ECO00026':
         plt.scatter(x,y,s=50,c='red',label='ECO00026')
     else:
