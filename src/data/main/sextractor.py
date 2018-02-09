@@ -217,17 +217,6 @@ for index,obj in enumerate(good_Obj.ECOID):
     sdss_r_petro_ab = f814abmag
     sdss_i_petro_st = f814stmag - 0.748 #Using average i-z for ECO of 0.226
     
-    
-    
-#    isomag += stzpt814
-#    sdss_r_iso = isomag - 1
-#    
-#    isocorrmag += stzpt814
-#    sdss_r_isocorr = isocorrmag - 1
-#    
-#    automag += stzpt814
-#    sdss_r_auto = automag - 1
-    
     print('Retrieving rmag from catalog')
     sdss_r_cat = ECO_phot_cat.rmag.loc[ECO_phot_cat.ECOID==obj].values[0]
     sdss_i_cat = ECO_phot_cat.imag.loc[ECO_phot_cat.ECOID==obj].values[0]
@@ -236,25 +225,13 @@ for index,obj in enumerate(good_Obj.ECOID):
     sdssr_abpetro_calc.append(sdss_r_petro_ab)
     sdssi_stpetro_calc.append(sdss_i_petro_st)
     
-#    sdssr_iso_calc.append(sdss_r_iso)
-#    sdssr_isocorr_calc.append(sdss_r_isocorr)
-#    sdssr_auto_calc.append(sdss_r_auto)
     sdssr_cat.append(sdss_r_cat)
     sdssi_cat.append(sdss_i_cat)
-#    y_err.append(magerr)
+
     hdu_f814w_coadd.close()
 
 copy_sdssr = sdssr_cat
 copy_sdssi = sdssi_cat
-
-sdssr_cat = np.array(sdssr_cat)
-sdss_i_cat = np.array(sdss_i_cat)
-sdssr_stpetro_calc = np.array(sdssr_stpetro_calc)
-sdssi_stpetro_calc = np.array(sdssi_stpetro_calc)
-good_Obj_subset = np.array(good_Obj_subset)
-
-print(good_Obj_subset)
-print(sdssr_stpetro_calc)
 
 os.chdir('..')
 print('Plotting')
@@ -262,13 +239,13 @@ print('Plotting')
 #my_xticks = good_Obj_subset
 fig1 = plt.figure(figsize=(10,8))
 #plt.xticks(x, my_xticks,rotation=90)
-for label,x,y in zip(good_Obj_subset,sdssr_cat,sdssr_stpetro_calc):
-    if label=='ECO00026':
-        plt.scatter(x,y,s=50,c='red',label='ECO00026')
-    else:
-        plt.scatter(x,y,s=50,c='lightgrey')
+#for label,x,y in zip(good_Obj_subset,sdssr_cat,sdssr_stpetro_calc):
+#    if label=='ECO00026':
+#        plt.scatter(x,y,s=50,c='red',label='ECO00026')
+#    else:
+#        plt.scatter(x,y,s=50,c='lightgrey')
 
-#plt.scatter(sdssr_cat,sdssr_stpetro_calc,s=50,c='lightgrey',label='r mag comparison')
+plt.scatter(sdssr_cat,sdssr_stpetro_calc,s=50,c='lightgrey',label='r mag comparison')
 plt.plot(sdssr_cat,copy_sdssr,'k--')
 #plt.scatter(x,sdssr_abpetro_calc,s=50, c='b',label='calculated petro rmag (ab)')
 #plt.scatter(x,sdssr_iso_calc, c='b',label='calculated iso rmag')
