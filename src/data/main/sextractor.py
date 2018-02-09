@@ -44,14 +44,9 @@ sdssr_stpetro_calc = []
 sdssr_abpetro_calc = []
 sdssi_stpetro_calc = []
 good_Obj_subset = []
-#sdssr_iso_calc = []
-#sdssr_isocorr_calc = []
-#sdssr_auto_calc = []
 sdssr_cat = []
 sdssi_cat = []
-#d2d_arr = []
 
-#y_err = []
 for index,obj in enumerate(good_Obj.ECOID):
     print('{0}/{1} {2}'.format(index+1,len(good_Obj.ECOID),obj))
     dir_path = os.getcwd()
@@ -126,71 +121,64 @@ for index,obj in enumerate(good_Obj.ECOID):
     
     print('Getting petro mag from test.cat')
 
-    try:
-        cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
-                                  f814w_cat['y_world']*u.deg)
-        cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
-        idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
-    
-        f814mag = f814w_cat.petro_mag.values[idx_sdss]
-        
-        if f814mag == 99.0:
-            raise ValueError
-        
-    except ValueError as valueerror:
-        os.chdir('..')
-        with open('magnitude_errors_catmatch.txt','a') as newfile:
-            newfile.write('{0} has a mag of 99\n'.format(obj))
-            newfile.close()
-        print('Magnitude is 99. Moving to next object.')
-        os.chdir(obj)
-        hdu_f814w_coadd.close()
-        continue
-    
-    
-    
-    print('Writing separation to file')
-    print(d2d_sdss)
-    os.chdir('..')
-    with open('catmatch_separation.txt','a') as newfile:
-        newfile.write('Separation for {0} is: {1}'.format(obj,d2d_sdss.arcsec[0]))
-        newfile.write('\n')
-        newfile.close()
-    os.chdir(obj)
-        
-            
-#    isomag = f814w_cat.iso_mag.values[idx_sdss]
-#    isocorrmag = f814w_cat.isocorr_mag.values[idx_sdss]
-#    automag = f814w_cat.auto_mag.values[idx_sdss]
-#    
-#    petroflux = f814w_cat.petro_flux.values[idx_sdss]
-    
 #    try:
-#        f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
-#                                               f814w_cat.xmax_image))&\
-#                                              ((f814w_cat.ymin_image < [yy])&([yy] < \
-#                                               f814w_cat.ymax_image))]\
-#                                              .values[0] 
+#        cat_sextractor = SkyCoord(f814w_cat['x_world']*u.deg,\
+#                                  f814w_cat['y_world']*u.deg)
+#        cat_eco = SkyCoord(ra*u.deg, dec*u.deg)
+#        idx_sdss, d2d_sdss, d3d_sdss = cat_eco.match_to_catalog_sky(cat_sextractor)
+#    
+#        f814mag = f814w_cat.petro_mag.values[idx_sdss]
+#        
 #        if f814mag == 99.0:
 #            raise ValueError
-#    except IndexError as indexerror:
-#        os.chdir('..')
-#        with open('magnitude_errors.txt','a') as newfile:
-#            newfile.write('{0} gives {1}\n'.format(obj,indexerror))
-#            newfile.close()
-#        print('Error in getting magnitude. Moving to next object.')
-#        os.chdir(obj)
-#        hdu_f814w_coadd.close()
-#        continue
+#        
 #    except ValueError as valueerror:
 #        os.chdir('..')
-#        with open('magnitude_errors.txt','a') as newfile:
+#        with open('magnitude_errors_catmatch.txt','a') as newfile:
 #            newfile.write('{0} has a mag of 99\n'.format(obj))
 #            newfile.close()
 #        print('Magnitude is 99. Moving to next object.')
-#        os.chdir(obj) #Otherwise line 59 would throw an error
+#        os.chdir(obj)
 #        hdu_f814w_coadd.close()
 #        continue
+#    
+#    
+#    
+#    print('Writing separation to file')
+#    os.chdir('..')
+#    with open('catmatch_separation.txt','a') as newfile:
+#        newfile.write('Separation for {0} is: {1}'.format(obj,d2d_sdss.arcsec[0]))
+#        newfile.write('\n')
+#        newfile.close()
+#    os.chdir(obj)
+        
+    
+    try:
+        f814mag = f814w_cat.petro_mag.loc[((f814w_cat.xmin_image < [xx])&([xx] < \
+                                               f814w_cat.xmax_image))&\
+                                              ((f814w_cat.ymin_image < [yy])&([yy] < \
+                                               f814w_cat.ymax_image))]\
+                                              .values[0] 
+        if f814mag == 99.0:
+            raise ValueError
+    except IndexError as indexerror:
+        os.chdir('..')
+        with open('magnitude_errors.txt','a') as newfile:
+            newfile.write('{0} gives {1}\n'.format(obj,indexerror))
+            newfile.close()
+        print('Error in getting magnitude. Moving to next object.')
+        os.chdir(obj)
+        hdu_f814w_coadd.close()
+        continue
+    except ValueError as valueerror:
+        os.chdir('..')
+        with open('magnitude_errors.txt','a') as newfile:
+            newfile.write('{0} has a mag of 99\n'.format(obj))
+            newfile.close()
+        print('Magnitude is 99. Moving to next object.')
+        os.chdir(obj) #Otherwise line 59 would throw an error
+        hdu_f814w_coadd.close()
+        continue
         
     good_Obj_subset.append(obj)   
                                       
