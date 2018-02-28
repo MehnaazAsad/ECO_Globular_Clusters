@@ -74,7 +74,7 @@ for index,obj in enumerate(good_Obj.ECOID):
     subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
     '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
-    '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
+    '-CATALOG_NAME','hammer_acs_wfc_f814w.cat']) #CHANGE THIS
 #    subprocess.call(['sex','test_'+f814_coadd,'-ANALYSIS_THRESH','1.5',\
 #    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
 #    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
@@ -83,7 +83,7 @@ for index,obj in enumerate(good_Obj.ECOID):
     subprocess.call(['sex',comb_coadd+","+f475_coadd,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
     '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
-    '-CATALOG_NAME',obj+'_acs_wfc_f475w.cat'])
+    '-CATALOG_NAME','hammer_acs_wfc_f475w.cat'])
     
 '''      
     prihdrf814 = hdu_f814w_coadd[0].header
