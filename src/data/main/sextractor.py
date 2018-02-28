@@ -48,7 +48,7 @@ good_Obj_subset = []
 sdssr_cat = []
 sdssi_cat = []
 
-for index,obj in enumerate(good_Obj.ECOID):
+for index,obj in enumerate([good_Obj]):
     print('{0}/{1} {2}'.format(index+1,len(good_Obj.ECOID),obj))
     dir_path = os.getcwd()
     if os.path.basename(dir_path) == 'main':
