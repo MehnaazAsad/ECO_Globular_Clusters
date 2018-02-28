@@ -40,6 +40,7 @@ ECO_phot_cat  = pd.read_csv(ECOphotcat, delim_whitespace=True,header=None,\
 
 #good_Obj_subset = good_Obj[:4]['ECOID'].append(good_Obj[5:9]['ECOID']).values
 
+good_Obj = good_Obj.ECOID[0]
 sdssr_stpetro_calc = []
 sdssr_abpetro_calc = []
 sdssi_stpetro_calc = []
@@ -56,9 +57,13 @@ for index,obj in enumerate(good_Obj.ECOID):
         os.chdir('../'+obj)
         
     comb_coadd = glob(obj+'_comb_coadd.fits')[0]
-    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
+#    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
+#    f475_coadd = glob(obj+'_acs_wfc_f475w_coadd.fits')[0]
+    f814_coadd = glob('h_v24_F814W_ivm_drz_cl_ver2.fits')[0]
+    f475_coadd = glob('h_v24_F475W_ivm_drz_cl_ver2.fits')[0]
 
-    hdu_f814w_coadd = fits.open(f814_coadd)
+#    hdu_f814w_coadd = fits.open(f814_coadd)
+#    hdu_f475w_coadd = fits.open(f475_coadd)
     
 #    data = hdu_f814w_coadd[1].data #remove 63-65 after testing
 #    hdr = hdu_f814w_coadd[1].header
@@ -75,23 +80,37 @@ for index,obj in enumerate(good_Obj.ECOID):
 #    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
 #    '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
 #    print('Finished running source extractor') #remove 73-76 after testing
+    subprocess.call(['sex',comb_coadd+","+f475_coadd,'-ANALYSIS_THRESH','1.5',\
+    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
+    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
+    '-CATALOG_NAME',obj+'_acs_wfc_f475w.cat'])
     
-      
-    prihdr = hdu_f814w_coadd[0].header
+'''      
+    prihdrf814 = hdu_f814w_coadd[0].header
 #    prihdr = hdu_f814w_coadd[1].header #delete after testing
-    photflam814 = prihdr['PHOTFLAM']
-    photzpt814 = prihdr['PHOTZPT']
-    photplam814 = prihdr['PHOTPLAM']
+    photflam814 = prihdrf814['PHOTFLAM']
+    photzpt814 = prihdrf814['PHOTZPT']
+    photplam814 = prihdrf814['PHOTPLAM']
+    
+    prihdrf475 = hdu_f475w_coadd[0].header
+    photflam475 = prihdrf475['PHOTFLAM']
+    photzpt475 = prihdrf475['PHOTZPT']
+    photplam475 = prihdrf475['PHOTPLAM']
+    
+    
     
     print('Calculating zeropoint')
     stzpt814 = (-2.5*np.log10(photflam814) + photzpt814)
     abzpt814 = -2.5*np.log10(photflam814) - (5*np.log10(photplam814)) - 2.408
+    
+    stzpt475 = (-2.5*np.log10(photflam475) + photzpt475)
+    abzpt475 = -2.5*np.log10(photflam475) - (5*np.log10(photplam475)) - 2.408
 
     ra = np.unique(ECO_new.RA.loc[ECO_new.ECOID==obj])[0]
     dec = np.unique(ECO_new.DEC.loc[ECO_new.ECOID==obj])[0]
     
     print('Converting to pixel coordinates')
-    wcs = WCS(prihdr)   
+    wcs = WCS(prihdrf814)   
     print(wcs)
     xx,yy = wcs.wcs_world2pix(ra,dec,1)
     print(xx,yy)
@@ -101,6 +120,15 @@ for index,obj in enumerate(good_Obj.ECOID):
     
     if obj in good_Obj.ECOID[:8].values:
         f814w_cat = pd.read_csv(obj+'_acs_wfc_f814w.cat',header=None,\
+                                delim_whitespace=True,\
+                                names=['iso_mag','isocorr_mag','auto_mag',\
+                                       'petro_flux','petro_fluxerr','petro_mag',\
+                                       'petro_magerr','petro_radius',\
+                                       'xmin_image','ymin_image','xmax_image',\
+                                       'ymax_image','x_image','y_image','x_world',\
+                                       'y_world','a_image','class_star'], \
+                                       comment='#')
+        f475w_cat = pd.read_csv(obj+'_acs_wfc_f475w.cat',header=None,\
                                 delim_whitespace=True,\
                                 names=['iso_mag','isocorr_mag','auto_mag',\
                                        'petro_flux','petro_fluxerr','petro_mag',\
@@ -159,7 +187,14 @@ for index,obj in enumerate(good_Obj.ECOID):
                                               ((f814w_cat.ymin_image < [yy])&([yy] < \
                                                f814w_cat.ymax_image))]\
                                               .values[0] 
+        f475mag = f475w_cat.petro_mag.loc[((f475w_cat.xmin_image < [xx])&([xx] < \
+                                               f475w_cat.xmax_image))&\
+                                              ((f475w_cat.ymin_image < [yy])&([yy] < \
+                                               f475w_cat.ymax_image))]\
+                                              .values[0]                                               
         if f814mag == 99.0:
+            raise ValueError
+        if f475mag == 99.0:
             raise ValueError
     except IndexError as indexerror:
         os.chdir('..')
@@ -189,6 +224,7 @@ for index,obj in enumerate(good_Obj.ECOID):
 #                                      .values[0]
 
     f814mag = pd.to_numeric(f814mag)
+    f475mag = pd.to_numeric(f475mag)
     
 #    os.chdir('..')
 #    with open('sextractor_magflux_ECO00026.txt','a') as newfile: #change name
@@ -197,10 +233,14 @@ for index,obj in enumerate(good_Obj.ECOID):
 #    os.chdir(obj)
     
     print(f814mag)
+    print(f475mag)
 
     print('Calculating rmag')
     f814stmag = f814mag + stzpt814
+    f475stmag = f475mag + stzpt475
+    
     f814abmag = f814mag + abzpt814
+    
     sdss_r_petro_st = f814stmag - 0.489 #Using average r-i for ECO of 0.289
     sdss_r_petro_ab = f814abmag
     sdss_i_petro_st = f814stmag - 0.748 #Using average i-z for ECO of 0.226
@@ -261,3 +301,4 @@ plt.savefig('calcimag_catimag_coma.png')
 #plt.hist(d2d_arr, histtype='step')
 #plt.xlabel(r'separation (degrees)')
 #plt.savefig('catmatch_separation.png')  
+'''
