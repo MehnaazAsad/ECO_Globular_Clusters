@@ -224,7 +224,11 @@ def update_header(arr_imgs,obj1,filter_i):
                     print('BUNIT was {0}'.format(bunit))
                     if bunit == 'counts':
                         data = data/EXPTIME
+                        ZPT_NEW = 30
+                        pixmod = 10**(-0.4*(PHOTZPT-ZPT_NEW))
+                        data = data*pixmod
                         hdulist[0].header.set('BUNIT','COUNTS/S')
+                        hdulist[0].header.set('MAGZPT',ZPT_NEW)
                         print('BUNIT is {0}'.format(hdulist[0].header['BUNIT']))
                 else:
                     if 'BUNIT' in hdulist[i].header:
@@ -248,7 +252,7 @@ def update_header(arr_imgs,obj1,filter_i):
                         hdulist[i].header['BUNIT'] = 'COUNTS/S'
                         hdulist[i].header.set('MAGZPT',ZPT_NEW)
                         print('BUNIT is {0}'.format(hdulist[i].header['BUNIT']))
-#                        print('PHOTZPT is {0}'.format(hdulist[i].header['PHOTZPT']))
+                        print('PHOTZPT is {0}'.format(hdulist[i].header['MAGZPT']))
             print('Done changing BUNIT')
             
             #Second pass to assign gain and exptime to headers
