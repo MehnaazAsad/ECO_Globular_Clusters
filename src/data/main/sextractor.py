@@ -40,7 +40,7 @@ ECO_phot_cat  = pd.read_csv(ECOphotcat, delim_whitespace=True,header=None,\
 
 #good_Obj_subset = good_Obj[:4]['ECOID'].append(good_Obj[5:9]['ECOID']).values
 
-good_Obj = good_Obj.ECOID[:1] #testing for ECO00026
+good_Obj = good_Obj[:1] #testing for ECO00026
 sdssr_stpetro_calc = []
 sdssr_abpetro_calc = []
 sdssi_stpetro_calc = []
