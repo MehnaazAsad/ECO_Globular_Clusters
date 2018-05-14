@@ -198,7 +198,7 @@ def update_header(arr_imgs,obj1,filter_i):
             #Get value of EXPTIME and PHOTZPT keyword from primary header and 
             #set CCDGAIN to a default value of 1
             EXPTIME = hdulist[0].header['EXPTIME']
-            PHOTZPT = hdulist[1].header['PHOTZPT']
+            ZPT_OLD = 26.776089102017217
             CCDGAIN = 1.0
             #First pass locating value for gain
             for i in range(2):
@@ -224,7 +224,7 @@ def update_header(arr_imgs,obj1,filter_i):
                     print('BUNIT was {0}'.format(bunit))
                     if bunit == 'counts':
                         ZPT_NEW = 30.0
-                        pixmod = 10**(-0.4*(PHOTZPT-ZPT_NEW))
+                        pixmod = 10**(-0.4*(ZPT_OLD-ZPT_NEW))
                         data = (data/EXPTIME)*pixmod
                         hdulist[0].header.set('BUNIT','COUNTS/S')
                         hdulist[0].header.set('MAGZPT',ZPT_NEW)
@@ -233,17 +233,17 @@ def update_header(arr_imgs,obj1,filter_i):
                     if 'BUNIT' in hdulist[i].header:
                         bunit = hdulist[i].header['BUNIT']
                         print('BUNIT was {0}'.format(bunit))
-                        print('PHOTZPT was {0}'.format(PHOTZPT))
+                        print('PHOTZPT was {0}'.format(ZPT_OLD))
                         if bunit == 'COUNTS':
                             data = data/EXPTIME
                         if bunit == 'ELECTRONS':
                             ZPT_NEW = 30.0
-                            pixmod = 10**(-0.4*(PHOTZPT-ZPT_NEW))
+                            pixmod = 10**(-0.4*(ZPT_OLD-ZPT_NEW))
                             print(pixmod)
                             data = (data/(CCDGAIN*EXPTIME))*pixmod
                         if bunit == 'ELECTRONS/S':
                             ZPT_NEW = 30.0
-                            pixmod = 10**(-0.4*(PHOTZPT-ZPT_NEW))
+                            pixmod = 10**(-0.4*(ZPT_OLD-ZPT_NEW))
                             print(pixmod)
                             data = (data/CCDGAIN)*pixmod
                         if bunit == 'ELECTRONS/SEC':
