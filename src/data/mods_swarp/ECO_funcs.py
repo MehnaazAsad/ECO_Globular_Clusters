@@ -246,7 +246,7 @@ def update_header(arr_imgs,obj1,filter_i):
                         if bunit == 'ELECTRONS/SEC':
                             data = data/CCDGAIN
                         hdulist[i].header['BUNIT'] = 'COUNTS/S'
-                        hdulist[i].header.set['MAGZPT'] = ZPT_NEW
+                        hdulist[1].header.set['MAGZPT'] = ZPT_NEW
                         print('BUNIT is {0}'.format(hdulist[i].header['BUNIT']))
 #                        print('PHOTZPT is {0}'.format(hdulist[i].header['PHOTZPT']))
             print('Done changing BUNIT')
