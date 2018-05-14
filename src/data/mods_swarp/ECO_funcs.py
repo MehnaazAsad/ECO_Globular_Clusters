@@ -239,10 +239,12 @@ def update_header(arr_imgs,obj1,filter_i):
                         if bunit == 'ELECTRONS':
                             ZPT_NEW = 30.0
                             pixmod = 10**(-0.4*(PHOTZPT-ZPT_NEW))
+                            print(pixmod)
                             data = (data/(CCDGAIN*EXPTIME))*pixmod
                         if bunit == 'ELECTRONS/S':
                             ZPT_NEW = 30.0
                             pixmod = 10**(-0.4*(PHOTZPT-ZPT_NEW))
+                            print(pixmod)
                             data = (data/CCDGAIN)*pixmod
                         if bunit == 'ELECTRONS/SEC':
                             data = data/CCDGAIN
