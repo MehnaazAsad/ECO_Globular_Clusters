@@ -225,7 +225,7 @@ def update_header(arr_imgs,obj1,filter_i):
                     print('BUNIT was {0}'.format(bunit))
                     if bunit == 'counts':
                         ZPT_NEW = 30.0
-                        ZPT_OLD = -2.5*np.log10(PHOTFLAM) + PHOTZPT
+                        ZPT_OLD = -2.5*np.log10(PHOTFLAM*EXPTIME) + PHOTZPT
                         pixmod = 10**(-0.4*(ZPT_OLD-ZPT_NEW))
                         data = (data/EXPTIME)*pixmod
                         hdulist[0].header.set('BUNIT','COUNTS/S')
@@ -238,21 +238,25 @@ def update_header(arr_imgs,obj1,filter_i):
                         ZPT_OLD = -2.5*np.log10(PHOTFLAM) + PHOTZPT
                         print('PHOTZPT was {0}'.format(ZPT_OLD))
                         if bunit == 'COUNTS':
-                            data = data/EXPTIME
+                            ZPT_NEW = 30.0
+                            ZPT_OLD = -2.5*np.log10(PHOTFLAM*EXPTIME) + PHOTZPT
+                            pixmod = 10**(-0.4*(ZPT_OLD-ZPT_NEW))
+                            data = (data/EXPTIME)*pixmod
                         if bunit == 'ELECTRONS':
                             ZPT_NEW = 30.0
-                            ZPT_OLD = -2.5*np.log10(PHOTFLAM) + PHOTZPT
+                            ZPT_OLD = -2.5*np.log10(PHOTFLAM*CCDGAIN*EXPTIME) + PHOTZPT
                             pixmod = 10**(-0.4*(ZPT_OLD-ZPT_NEW))
-                            print(pixmod)
                             data = (data/(CCDGAIN*EXPTIME))*pixmod
                         if bunit == 'ELECTRONS/S':
                             ZPT_NEW = 30.0
-                            ZPT_OLD = -2.5*np.log10(PHOTFLAM) + PHOTZPT
+                            ZPT_OLD = -2.5*np.log10(PHOTFLAM*CCDGAIN) + PHOTZPT
                             pixmod = 10**(-0.4*(ZPT_OLD-ZPT_NEW))
-                            print(pixmod)
                             data = (data/CCDGAIN)*pixmod
                         if bunit == 'ELECTRONS/SEC':
-                            data = data/CCDGAIN
+                            ZPT_NEW = 30.0
+                            ZPT_OLD = -2.5*np.log10(PHOTFLAM*CCDGAIN) + PHOTZPT
+                            pixmod = 10**(-0.4*(ZPT_OLD-ZPT_NEW))
+                            data = (data/CCDGAIN)*pixmod
                         hdulist[i].header['BUNIT'] = 'COUNTS/S'
                         hdulist[i].header['MAGZPT'] = ZPT_NEW
                         print('BUNIT is {0}'.format(hdulist[i].header['BUNIT']))
