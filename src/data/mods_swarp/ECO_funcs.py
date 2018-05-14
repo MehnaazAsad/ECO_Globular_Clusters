@@ -223,10 +223,9 @@ def update_header(arr_imgs,obj1,filter_i):
                     bunit = hdulist[0].header['D001OUUN']
                     print('BUNIT was {0}'.format(bunit))
                     if bunit == 'counts':
-                        data = data/EXPTIME
                         ZPT_NEW = 30.0
                         pixmod = 10**(-0.4*(PHOTZPT-ZPT_NEW))
-                        data = data*pixmod
+                        data = (data/EXPTIME)*pixmod
                         hdulist[0].header.set('BUNIT','COUNTS/S')
                         hdulist[0].header.set('MAGZPT',ZPT_NEW)
                         print('BUNIT is {0}'.format(hdulist[0].header['BUNIT']))
@@ -238,15 +237,13 @@ def update_header(arr_imgs,obj1,filter_i):
                         if bunit == 'COUNTS':
                             data = data/EXPTIME
                         if bunit == 'ELECTRONS':
-                            data = data/(CCDGAIN*EXPTIME)
                             ZPT_NEW = 30.0
                             pixmod = 10**(-0.4*(PHOTZPT-ZPT_NEW))
-                            data = data*pixmod
+                            data = (data/(CCDGAIN*EXPTIME))*pixmod
                         if bunit == 'ELECTRONS/S':
-                            data = data/CCDGAIN
                             ZPT_NEW = 30.0
                             pixmod = 10**(-0.4*(PHOTZPT-ZPT_NEW))
-                            data = data*pixmod
+                            data = (data/CCDGAIN)*pixmod
                         if bunit == 'ELECTRONS/SEC':
                             data = data/CCDGAIN
                         hdulist[i].header['BUNIT'] = 'COUNTS/S'
