@@ -40,7 +40,7 @@ ECO_phot_cat  = pd.read_csv(ECOphotcat, delim_whitespace=True,header=None,\
 
 #good_Obj_subset = good_Obj[:4]['ECOID'].append(good_Obj[5:9]['ECOID']).values
 
-good_Obj = good_Obj.ECOID[0]
+good_Obj = good_Obj.ECOID[:1] #testing for ECO00026
 sdssr_stpetro_calc = []
 sdssr_abpetro_calc = []
 sdssi_stpetro_calc = []
@@ -48,8 +48,8 @@ good_Obj_subset = []
 sdssr_cat = []
 sdssi_cat = []
 
-for index,obj in enumerate([good_Obj]):
-    print('{0}/{1} {2}'.format(index+1,len([good_Obj]),obj))
+for index,obj in enumerate(good_Obj.ECOID):
+    print('{0}/{1} {2}'.format(index+1,len(good_Obj.ECOID),obj))
     dir_path = os.getcwd()
     if os.path.basename(dir_path) == 'main':
         os.chdir('../../../data/interim/'+obj)
@@ -57,13 +57,11 @@ for index,obj in enumerate([good_Obj]):
         os.chdir('../'+obj)
         
     comb_coadd = glob(obj+'_comb_coadd.fits')[0]
-#    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
-#    f475_coadd = glob(obj+'_acs_wfc_f475w_coadd.fits')[0]
-    f814_coadd = glob('h_v24_F814W_ivm_drz_cl_ver2.fits')[0]
-    f475_coadd = glob('h_v24_F475W_ivm_drz_cl_ver2.fits')[0]
+    f814_coadd = glob(obj+'_acs_wfc_f814w_coadd.fits')[0]
+    f475_coadd = glob(obj+'_acs_wfc_f475w_coadd.fits')[0]
 
-#    hdu_f814w_coadd = fits.open(f814_coadd)
-#    hdu_f475w_coadd = fits.open(f475_coadd)
+    hdu_f814w_coadd = fits.open(f814_coadd)
+    hdu_f475w_coadd = fits.open(f475_coadd)
     
 #    data = hdu_f814w_coadd[1].data #remove 63-65 after testing
 #    hdr = hdu_f814w_coadd[1].header
@@ -74,7 +72,7 @@ for index,obj in enumerate([good_Obj]):
     subprocess.call(['sex',comb_coadd+","+f814_coadd,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
     '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
-    '-CATALOG_NAME','hammer_acs_wfc_f814w.cat']) #CHANGE THIS
+    '-CATALOG_NAME',obj+'_acs_wfc_f814w.cat']) #CHANGE THIS
 #    subprocess.call(['sex','test_'+f814_coadd,'-ANALYSIS_THRESH','1.5',\
 #    '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
 #    '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
@@ -83,9 +81,9 @@ for index,obj in enumerate([good_Obj]):
     subprocess.call(['sex',comb_coadd+","+f475_coadd,'-ANALYSIS_THRESH','1.5',\
     '-BACK_SIZE','128','-DEBLEND_MINCONT','0.0025', '-DETECT_THRESH','1.5',\
     '-DETECT_MINAREA','9','-SEEING_FWHM','0.1','-PIXEL_SCALE','0.0',\
-    '-CATALOG_NAME','hammer_acs_wfc_f475w.cat'])
+    '-CATALOG_NAME',obj+'_acs_wfc_f475w.cat'])
     
-'''      
+      
     prihdrf814 = hdu_f814w_coadd[0].header
 #    prihdr = hdu_f814w_coadd[1].header #delete after testing
     photflam814 = prihdrf814['PHOTFLAM']
@@ -301,4 +299,3 @@ plt.savefig('calcimag_catimag_coma.png')
 #plt.hist(d2d_arr, histtype='step')
 #plt.xlabel(r'separation (degrees)')
 #plt.savefig('catmatch_separation.png')  
-'''

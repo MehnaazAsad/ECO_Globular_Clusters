@@ -29,7 +29,7 @@ goodObj = '../../../data/interim/goodObjv2.txt'
 #and the formatted ECO catalog
 ECO_dict,ECO_keys,ECOcat = foo.make_dict(ECOnew,goodObj)
 
-for index,key in enumerate(ECO_keys):
+for index,key in enumerate(ECO_keys[0:6]): #testing ECO00026
     print('Key {0}/{1}'.format(index+1,len(ECO_keys)))
     print(key)
     obj = key[0]

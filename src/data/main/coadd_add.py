@@ -49,7 +49,7 @@ bad_obj = ['ECO03777', 'ECO03847', 'ECO04454', 'ECO06176', 'ECO06184', \
 
 #Iterate through all object folders and add the coadds for that object 
 #only if it is not 100% blank
-for index,obj in enumerate(objs_arr):
+for index,obj in enumerate(objs_arr[:1]): #making combined coadd for ECO00026
     print('Object {0}/{1}'.format(index+1,len(objs_arr)))
     if obj in bad_obj:
         print('Bad object {0}'.format(obj))

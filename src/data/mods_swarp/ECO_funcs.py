@@ -195,9 +195,10 @@ def update_header(arr_imgs,obj1,filter_i):
             #if there is more than one header get data from the 'SCI' extension
             else:
                 data = getdata(img, 1, header=False)
-            #Get value of EXPTIME keyword from primary header and set
-            #CCDGAIN to a default value of 1
+            #Get value of EXPTIME and PHOTZPT keyword from primary header and 
+            #set CCDGAIN to a default value of 1
             EXPTIME = hdulist[0].header['EXPTIME']
+            PHOTZPT = hdulist[0].header['PHOTZPT']
             CCDGAIN = 1.0
             #First pass locating value for gain
             for i in range(2):
@@ -233,11 +234,18 @@ def update_header(arr_imgs,obj1,filter_i):
                             data = data/EXPTIME
                         if bunit == 'ELECTRONS':
                             data = data/(CCDGAIN*EXPTIME)
+                            ZPT_NEW = 30
+                            pixmod = 10**(-0.4*(PHOTZPT-ZPT_NEW))
+                            data = data*pixmod
                         if bunit == 'ELECTRONS/S':
                             data = data/CCDGAIN
+                            ZPT_NEW = 30
+                            pixmod = 10**(-0.4*(PHOTZPT-ZPT_NEW))
+                            data = data*pixmod
                         if bunit == 'ELECTRONS/SEC':
                             data = data/CCDGAIN
                         hdulist[i].header['BUNIT'] = 'COUNTS/S'
+                        hdulist[i].header['PHOTZPT'] = ZPT_NEW
                         print('BUNIT is {0}'.format(hdulist[i].header['BUNIT']))
             print('Done changing BUNIT')
             
