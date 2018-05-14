@@ -198,7 +198,7 @@ def update_header(arr_imgs,obj1,filter_i):
             #Get value of EXPTIME and PHOTZPT keyword from primary header and 
             #set CCDGAIN to a default value of 1
             EXPTIME = hdulist[0].header['EXPTIME']
-            PHOTZPT = hdulist[0].header['PHOTZPT']
+            PHOTZPT = hdulist[1].header['PHOTZPT']
             CCDGAIN = 1.0
             #First pass locating value for gain
             for i in range(2):
