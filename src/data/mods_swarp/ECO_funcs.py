@@ -198,7 +198,6 @@ def update_header(arr_imgs,obj1,filter_i):
             #Get value of EXPTIME and PHOTZPT keyword from primary header and 
             #set CCDGAIN to a default value of 1
             EXPTIME = hdulist[0].header['EXPTIME']
-            PHOTZPT = hdulist[1].header['PHOTZPT']
             CCDGAIN = 1.0
             #First pass locating value for gain
             for i in range(2):
@@ -229,6 +228,7 @@ def update_header(arr_imgs,obj1,filter_i):
                 else:
                     if 'BUNIT' in hdulist[i].header:
                         bunit = hdulist[i].header['BUNIT']
+                        PHOTZPT = hdulist[1].header['PHOTZPT']
                         print('BUNIT was {0}'.format(bunit))
                         print('PHOTZPT was {0}'.format(PHOTZPT))
                         if bunit == 'COUNTS':
@@ -246,7 +246,7 @@ def update_header(arr_imgs,obj1,filter_i):
                         if bunit == 'ELECTRONS/SEC':
                             data = data/CCDGAIN
                         hdulist[i].header['BUNIT'] = 'COUNTS/S'
-                        hdulist[i].header.set('PHOTZPT',ZPT_NEW)
+                        hdulist[i].header['PHOTZPT'] = ZPT_NEW
                         print('BUNIT is {0}'.format(hdulist[i].header['BUNIT']))
                         print('PHOTZPT is {0}'.format(hdulist[i].header['PHOTZPT']))
             print('Done changing BUNIT')
