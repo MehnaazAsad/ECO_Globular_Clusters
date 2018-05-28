@@ -4,55 +4,69 @@ Created on Thu Jul 27 16:39:59 2017
 
 @author: asadm2
 """
+### DESCRIPTION
+#This script uses swarp to combine images taken using the same filter
+
 from __future__ import division, print_function, absolute_import
-import astropy
-from glob import glob
 from astropy.io import fits
-from astropy.io.fits import getdata
-import warnings
-from astropy.utils.exceptions import AstropyUserWarning
 import pandas as pd
 import numpy as np
-import os
 import subprocess
 import imp
+import os
 
 foo = imp.load_source('ECO_funcs', '../mods_swarp/ECO_funcs.py')
 
+### Paths
+path_to_raw = '/fs1/masad/Research/Repositories/ECO_Globular_Clusters/'\
+'data/raw/'
+path_to_interim = '/fs1/masad/Research/Repositories/ECO_Globular_Clusters/'\
+'data/interim/'
+
+#If re-running script then these files have to be removed since
+#they are being opened in 'append' mode in ECO_func.py
+if os.path.isfile(path_to_interim + 'Error_swarp.txt'): 
+    os.remove(path_to_interim + 'Error_swarp.txt')
+if os.path.isfile(path_to_interim + 'percent_blankv2.txt'): 
+    os.remove(path_to_interim + 'percent_blankv2.txt')
+
 #Formatted ECO catalog with filters and new_filename column and list of 
 #good ECO objects
-ECOnew  = '../../../data/interim/ECO_formatted.txt'
-goodObj = '../../../data/interim/goodObjv2.txt'
+ECOnew  = path_to_interim + 'ECO_formatted.txt'
+goodObj = path_to_interim + 'goodObjv2.txt'
 
 #Using the make_dict function to return a dictionary whose keys are ECOID and
 #filter name and whose values are filenames, return the list of sorted keys,
 #and the formatted ECO catalog
 ECO_dict,ECO_keys,ECOcat = foo.make_dict(ECOnew,goodObj)
 
-for index,key in enumerate(ECO_keys[0:6]): #testing ECO00026
+for index,key in enumerate(ECO_keys): 
     print('Key {0}/{1}'.format(index+1,len(ECO_keys)))
-    print(key)
     obj = key[0]
     filter_i = key[1]
+    print('Object: {0} and filter: {1}'.format(obj,filter_i))
     dir_path = os.getcwd()
     #Since this file is in src/ and we need to access the images we have to 
     #move to the data/raw folder the first time this code runs
     if os.path.basename(dir_path) == 'main':
-        os.chdir('../../../data/raw/'+obj)
+        os.chdir(path_to_raw + obj)
     #After the first time all that has to be done is to move out of the  
     #interim ECO object dir and into the raw ECO object dir
     elif os.path.basename(dir_path) != obj:
-        os.chdir('../raw/'+obj)
+        os.chdir(path_to_raw + obj)
     #Using the ECOID,filter key to acess the values in the new_filename column
     #i.e. get a list of the images associated with this key pair
     print("Getting images from catalog")
     imgs_from_cat = ECO_dict.get_group(key)['new_filename'].values
-
+    
+    #Images from prelim_checks_3 that passed the "object-in-image" check
+    #as well as the non-zero pixel value check
     print("Getting images from text file")
     goodimagesfile = obj+'_goodimages.txt'
     goodimages = pd.read_csv(goodimagesfile,header=None,names=['filenames'])
     imgs_from_txt = goodimages.values
     
+    #Common images between full list from catalog and good imaging left
     print("Common images are")
     imgs = []
     for img in imgs_from_cat:

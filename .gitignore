@@ -72,5 +72,15 @@ target/
 # exclude data from source control by default
 /data/
 
+#exclude all plots
+/src/visualization/
+/reports/figures/
+
+#exclude papers saved
+/references/Papers/
+
+#exclude environment
+/environment.yml
+
 ## MAC files
 *.DS_Store
