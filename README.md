@@ -77,7 +77,7 @@ Project Flow
    | Input       | `src/data/mods_prelim_checks_2`, original ECO catalog, `Obj_arr.txt` from `prelim_checks_1.py` (PC1) and `pget_ECO.py` |
    | ----------- | ---------------------------------------- |
    | **Process** | **Takes images that passed PC1 and checks if the galaxy is in the image. After this check has passed the exposure time check and 2-filter check are both repeated in case some images are lost if the object was not in them** |
-   | **Output**  | **`obj_rev.txt` is created per object and is a list of all the images that passed this second round of preliminary checks, `goodObj.txt`, `badObj.txt` and `Error_prelim2.txt` ** |
+   | **Output**  | **`obj_rev.txt` is created per object and is a list of all the images that passed this second round of preliminary checks, `goodObj.txt`, `badObj.txt` and `Error_prelim2.txt`** |
 
    This is the second script that was run. `pget_ECO.py` is the script that is used to download the images using the URLs in the folders created by `prelim_checks_1.py`. 110 objects passed and 98 failed.
 
@@ -98,20 +98,12 @@ Project Flow
 
    | Input       | `goodObj.txt` from `prelim_checks_2.py` (PC2) and `ECO_formatted.txt` from `ECO_format.py` |
    | ----------- | ---------------------------------------- |
-   | **Process** | **Same as PC2 except there is an additional check that is required of whether or not the pixel value at the RA and DEC of galaxy is 0 or not. Exposure time and 2-filter checks are repeated since some images were lost. ** |
+   | **Process** | **Same as PC2 except there is an additional check that is required of whether or not the pixel value at the RA and DEC of galaxy is 0 or not. Exposure time and 2-filter checks are repeated since some images were lost.** |
    | **Output**  | **`Error_prelim3.txt`, `Prelim3_results.txt`, `Prelim3_results_good.txt`, `Prelim3_results_bad.txt`, `goodObjv2.txt`, and `good_images.txt` per object of all the images that passed this round of checks.** |
 
    This check was carried out because there were some images where even though the object was in the frame, part of the image was rotated as shown below on the right. The green circle shows the pixel position of the galaxy in question given its RA and DEC and you can see that the object is in the frame but in an area where pixel values are 0. Hence, this check.
 
-   ​
-
-   ​
-
-   ​
-
-   You may wish to combine all these checks into one script but that will require handling where the text files are read between all codes.
-
-   You may wish to combine all these checks into one script but that will require handling where the text files are read between all codes.
+   ![Picture1](/Users/asadm2/Documents/Grad_School/Research/Repositories/eco_globular_clusters/reports/figures/Picture1.png)You may wish to combine all these checks into one script but that will require handling where the text files are read between all codes.
 
    ​
 
@@ -120,7 +112,7 @@ Project Flow
    | Input       | `src/data/mods_swarp.py`, `ECO_formatted.txt`, `goodObjv2.txt` from `prelim_checks_3.py` (PC3) and images per filter per object. |
    | ----------- | ---------------------------------------- |
    | **Process** | **Per filter per object: image units are checked and zeropoints are rescaled (30) if image isn't in counts/s. Headers and data are updated and written to new versions of the images. Swarp is used to combine images per filter into coadds. Finally, the percentage of a coadd that is blank is calculated.** |
-   | **Output**  | **New versions of old fits images (`…_test_…`), `coadd.fits`, `coadd.weight.fits`, `swarp.xml`, `percent_blankv2.txt`, `Error_swarp.txt` and `img_list_testfil.txt` per object which is a text file of all the image names from new versions that are created. ** |
+   | **Output**  | **New versions of old fits images (`…_test_…`), `coadd.fits`, `coadd.weight.fits`, `swarp.xml`, `percent_blankv2.txt`, `Error_swarp.txt` and `img_list_testfil.txt` per object which is a text file of all the image names from new versions that are created.** |
 
    Originally, the blank percentage was calculated by seeing how many pixels had values that were less than/equal to 0 but then we changed it to only those values that are equal to 0. Hence, the second version of `percent_blank.txt`. The `Error_swarp.txt` file keeps a track of all errors that are raised while running this script and should be checked every time swarp is run. [(SWarp manual)](https://www.astromatic.net/pubsvn/software/swarp/trunk/doc/swarp.pdf)
 
@@ -156,8 +148,8 @@ Project Flow
 
    | Input       | `comacandidates.txt` (manually created from `/src/visualization/eco_sample.py`), `ECO_formatted.txt`, `ECOphot_final.txt`, `comb_coadd.fits`, `acs_f475w` & `acs_f814w` `coadds.fits` per object. |
    | ----------- | ---------------------------------------- |
-   | **Process** | **Run SExtractor on subset of Coma that has imaging in f475w and f814w. Petrosian magnitudes are obtained, zeropoints are calculated and applied to petro mags. Lupton transformations are used to compare SE mags to closest equivalent SDSS band magnitude in ECO photometry catalog. (r and i band) 2 different methods of matching between the object to its SE detection are used and tested. (More info in script) ** |
-   | **Output**  | **Depending on which method was used: `magnitude_errors_degmatch.txt`, `magnitude_errors_pixelmatch.txt`, `catmatch_separation.txt`. Figures: `/reports/figures/calcrmag_catrmag_coma.png`, `/reports/figures/calcimag_catimag_coma.png` and `reports/figures/catmatch_separation.png`. ** |
+   | **Process** | **Run SExtractor on subset of Coma that has imaging in f475w and f814w. Petrosian magnitudes are obtained, zeropoints are calculated and applied to petro mags. Lupton transformations are used to compare SE mags to closest equivalent SDSS band magnitude in ECO photometry catalog. (r and i band) 2 different methods of matching between the object to its SE detection are used and tested. (More info in script)** |
+   | **Output**  | **Depending on which method was used: `magnitude_errors_degmatch.txt`, `magnitude_errors_pixelmatch.txt`, `catmatch_separation.txt`. Figures: `/reports/figures/calcrmag_catrmag_coma.png`, `/reports/figures/calcimag_catimag_coma.png` and `reports/figures/catmatch_separation.png`.** |
 
    The original goal was to be able to compare our magnitudes to the [Hammer et. al 2010](https://arxiv.org/pdf/1005.3300.pdf) catalog of the Coma cluster as a test of our photometry. The magnitudes weren't matching post swarp.py which is why rescaling the zeropoint was necessary. As commented in the script, the calculations of zeropoints and their application to the petro mags are now outdated since the rescaling was applied. Now, you just have to add the new zeropoint directly to the magnitudes that SE returns. 
 
