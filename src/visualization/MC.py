@@ -140,8 +140,8 @@ for name in single_halos.ECOID.values[:1]:
                     #redshift and ETC online
     
     #parameters of gaussian for number distribution
-    mean_num = 10**(GC_count.log_GC_count.loc[GC_count.ECOID==name].values[0])
-    sigma_num  = 0.3
+    mean_num = 10**(GC_count.log_GC_count.loc[GC_count.ECOID==name].values[0]) #From Zaritsky 2015 equation 1
+    sigma_num  = 0.3 #rough estimation from Zaritsky 2015 Figure 4
     
     n_detected = []
     halo_masses = []
