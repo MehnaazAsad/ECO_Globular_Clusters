@@ -101,9 +101,7 @@ Project Flow
    | **Process** | **Same as PC2 except there is an additional check that is required of whether or not the pixel value at the RA and DEC of galaxy is 0 or not. Exposure time and 2-filter checks are repeated since some images were lost. ** |
    | **Output**  | **`Error_prelim3.txt`, `Prelim3_results.txt`, `Prelim3_results_good.txt`, `Prelim3_results_bad.txt`, `goodObjv2.txt`, and `good_images.txt` per object of all the images that passed this round of checks.** |
 
-   This check was carried out because there were some images where even though the object was in the frame, part of the image was rotated as shown below on the right. The green circle shows the pixel position of the galaxy in question given its RA and DEC and you can see that the object is in the frame but in an area where pixel values are 0. Hence, this check. 
-
-   ![Picture1](/Users/asadm2/Desktop/Picture1.png)
+   This check was carried out because there were some images where even though the object was in the frame, part of the image was rotated as shown below on the right. The green circle shows the pixel position of the galaxy in question given its RA and DEC and you can see that the object is in the frame but in an area where pixel values are 0. Hence, this check.
 
    You may wish to combine all these checks into one script but that will require handling where the text files are read between all codes.
 
