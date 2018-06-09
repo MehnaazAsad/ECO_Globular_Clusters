@@ -103,7 +103,7 @@ Project Flow
 
    This check was carried out because there were some images where even though the object was in the frame, part of the image was rotated as shown below on the right. The green circle shows the pixel position of the galaxy in question given its RA and DEC and you can see that the object is in the frame but in an area where pixel values are 0. Hence, this check.
 
-   ![Picture1](/Users/asadm2/Documents/Grad_School/Research/Repositories/eco_globular_clusters/reports/figures/Picture1.png)You may wish to combine all these checks into one script but that will require handling where the text files are read between all codes.
+   ![Picture1](reports/figures/Picture1.png?raw=true)You may wish to combine all these checks into one script but that will require handling where the text files are read between all codes.
 
    ​
 
