@@ -5,7 +5,9 @@ Created on Thu Jul 27 16:39:59 2017
 @author: asadm2
 """
 ### DESCRIPTION
-#This script uses swarp to combine images taken using the same filter
+#This script uses swarp to combine images taken using the same filter. Image
+#data is updated, zeropoint is scaled to 30, units are all set to counts/s. 
+#The percentage of the coadd that's blank i.e. pixel value = 0 is calculated. 
 
 from __future__ import division, print_function, absolute_import
 from astropy.io import fits
@@ -15,6 +17,7 @@ import subprocess
 import imp
 import os
 
+#Importing modules that are used in this script
 foo = imp.load_source('ECO_funcs', '../mods_swarp/ECO_funcs.py')
 
 ### Paths
@@ -24,7 +27,7 @@ path_to_interim = '/fs1/masad/Research/Repositories/ECO_Globular_Clusters/'\
 'data/interim/'
 
 #If re-running script then these files have to be removed since
-#they are being opened in 'append' mode in ECO_func.py
+#they are being opened in 'append' mode in ECO_funcs.py
 if os.path.isfile(path_to_interim + 'Error_swarp.txt'): 
     os.remove(path_to_interim + 'Error_swarp.txt')
 if os.path.isfile(path_to_interim + 'percent_blankv2.txt'): 
