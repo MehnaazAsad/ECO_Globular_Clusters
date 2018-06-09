@@ -103,6 +103,14 @@ Project Flow
 
    This check was carried out because there were some images where even though the object was in the frame, part of the image was rotated as shown below on the right. The green circle shows the pixel position of the galaxy in question given its RA and DEC and you can see that the object is in the frame but in an area where pixel values are 0. Hence, this check.
 
+   ​
+
+   ​
+
+   ​
+
+   You may wish to combine all these checks into one script but that will require handling where the text files are read between all codes.
+
    You may wish to combine all these checks into one script but that will require handling where the text files are read between all codes.
 
    ​
@@ -167,7 +175,7 @@ Project Flow
 
    | Input       | `eco_dr1.txt`, `ECOphot_final.txt` and `goodObjv2.txt` |
    | ----------- | ---------------------------------------- |
-   | **Process** | **Plot current sample (Figure 1) and use equation 1 in Zaritsky et al. 2015 to get an estimate of number of globular clusters (GCs) ** |
+   | **Process** | **Plot current sample (Figure 1) and use equation 1 in Zaritsky et al. 2015 to get an estimate of number of globular clusters (GCs)** |
    | **Output**  | **N/A**                                  |
 
    [Zaritsky et al. 2015](https://arxiv.org/pdf/1511.05608.pdf)
