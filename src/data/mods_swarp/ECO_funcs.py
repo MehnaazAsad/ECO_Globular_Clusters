@@ -4,6 +4,9 @@ Created on Thu Jul 27 11:58:27 2017
 
 @author: asadm2
 """
+### DESCRIPTION
+#This script includes all the functions that swarp.py requires. 
+
 from __future__ import division, absolute_import, print_function
 from astropy.utils.exceptions import AstropyUserWarning
 from astropy.io.fits import getdata
@@ -57,12 +60,12 @@ def make_dict(ECOnew,goodObj):
 def update_header(arr_imgs,obj,filter_i):
     
     """
-    This function takes an image and checks for CCDGAIN and EXPTIME keywords
-    in the first 2 headers of the fits file. If it finds the keywords it 
-    writes them to both headers if it is missing in either. It then writes
-    the updated header to a new version of the fits file. After it has done 
-    this for all images related to a filter, it writes the names of the files
-    to a text file. It also rescales the zeropoint to account for images
+    This function takes images per object per filter and checks for CCDGAIN and 
+    EXPTIME keywords in the first 2 headers of the fits file. If it finds the 
+    keywords it writes them to both headers if it is missing in either. It then 
+    writes the updated header to a new version of the fits file. After it has 
+    done this for all images related to a filter, it writes the names of the 
+    files to a text file. It also rescales the zeropoint to account for images
     being in different units.
     
     Args:
@@ -78,7 +81,9 @@ def update_header(arr_imgs,obj,filter_i):
         file to begin with. 
     
     Raises:
-        IOError: if 'empty or corrupt FITS file' or 'file does not exist'
+        IOError: if 'empty or corrupt FITS file' or 'file does not exist'. 
+        These errors are written to Error_swarp.txt which should be checked
+        whenever this script is run. 
     """
     
     for img in arr_imgs:
@@ -115,8 +120,11 @@ def update_header(arr_imgs,obj,filter_i):
                         CCDGAIN = hdulist[i].header['ATODGAIN']
                         break
             
+            #Locating units of image
             print('Doing BUNIT check')
             for i in range(2):
+                #If there is only one header then this is the only place to 
+                #check
                 if len(hdulist) == 1:
                     bunit = hdulist[0].header['D001OUUN']
                     print('BUNIT was {0}'.format(bunit))
@@ -130,6 +138,8 @@ def update_header(arr_imgs,obj,filter_i):
                         hdulist[0].header.set('MAGZPT',ZPT_NEW)
                         print('BUNIT is {0}'.format(hdulist[0].\
                               header['BUNIT']))
+                        
+                #If there are multiple headers then they all have to be checked
                 else:
                     if 'BUNIT' in hdulist[i].header:
                         bunit = hdulist[i].header['BUNIT']
@@ -200,7 +210,7 @@ def update_header(arr_imgs,obj,filter_i):
             if os.path.basename(dir_path) == 'raw':
                 os.chdir(path_to_interim)
             with open('Error_swarp.txt','a') as newfile:              
-                newfile.write('Object {0} and image {1} raises {2} error'.\
+                newfile.write('Object {0} and image {1} raises {2}'.\
                               format(obj,img,e))
                 newfile.write('\n')
                 newfile.close()
@@ -241,7 +251,7 @@ def percent_blank(coadd,obj,filter_i):
         filter_i: filter name for that ECO object
     
     Returns:
-        nothing but creates a new text file
+        A new text file that contains the percentage that each coadd is empty.
         
     """
     
