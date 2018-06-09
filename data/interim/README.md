@@ -17,6 +17,7 @@
 | percent_blank                 | Calculating per object per filter and taking into account all pixel values less than OR exactly 0 and counting them as 'blank' |
 | percent_blankv2               | Calculating per object per filter and taking into account all pixel values that are ONLY exactly 0 and counting them as 'blank' |
 | Error_prelim3                 | Errors running prelim_checks_3.py        |
+| Error_prelim2                 | Errors running prelim_checks_2.py        |
 | ECOphot_final                 | ECO photometry catalog                   |
 | eco_dr1                       | Original ECO catalog from website        |
 | Prelim3_results_bad           | Had to repeat this because there were images where the object was there but in the black region because the image was rotated. |
