@@ -11,6 +11,7 @@ Created on Sun Apr  9 21:57:40 2017
 #ECOIDs that passed these checks as well as the corresponding URLs for the
 #images.
 
+from cosmo_utils.utils import work_paths as cwpaths
 from collections import Counter
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -18,10 +19,14 @@ import numpy as np
 import os
 
 ### Paths
-path_to_raw = '/fs1/masad/Research/Repositories/ECO_Globular_Clusters/'\
-'data/raw/'
-path_to_interim = '/fs1/masad/Research/Repositories/ECO_Globular_Clusters/'\
-'data/interim/'
+dict_of_paths = cwpaths.cookiecutter_paths()
+path_to_raw = dict_of_paths['raw_dir']
+path_to_interim = dict_of_paths['int_dir']
+path_to_figures = dict_of_paths['plot_dir']
+#path_to_raw = '/fs1/masad/Research/Repositories/ECO_Globular_Clusters/'\
+#'data/raw/'
+#path_to_interim = '/fs1/masad/Research/Repositories/ECO_Globular_Clusters/'\
+#'data/interim/'
 
 #Original ECO catalog
 ECO = path_to_raw + 'Available_HST_Data_ECO.txt'
@@ -216,6 +221,20 @@ filtercount = []
 counter = 0
 obj_fil_arr = [[ecoid, ECO_match_img.filters.loc[ECO_match_img.ECOID==ecoid],]\
                for ecoid in ECO_unq_id]
+
+obj_fil_arr_subset = []
+for obj in obj_fil_arr:
+    opt_fil_arr = []
+    ir_fil_arr = []
+    for fil in obj[1].values:
+        for opt_fil in ['475','555','606']:
+            if opt_fil in fil:
+                opt_fil_arr.append(fil)        
+        for ir_fil in ['815','850']:
+            if ir_fil in fil:
+                ir_fil_arr.append(fil)
+    if len(opt_fil_arr) > 0 and len(ir_fil_arr) > 0:
+        obj_fil_arr_subset.append((obj[0],opt_fil_arr+ir_fil_arr))
 
 for i in range(len(obj_fil_arr)): #len(obj_fil_arr) same as ECO_unq_id.size
     filtercount.append(len(np.unique(obj_fil_arr[i][1])))
